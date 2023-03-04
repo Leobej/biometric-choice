@@ -1,0 +1,22 @@
+package com.votemetric.biometricchoice.dto;
+
+import lombok.*;
+
+import javax.validation.constraints.NotBlank;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
+public class UserDTO {
+    private long id;
+    @NotBlank(message = "username cannot be blank")
+    @NonNull
+    private String username;
+    @NotBlank(message = "password cannot be blank")
+    @NonNull
+    private String password;
+
+}
