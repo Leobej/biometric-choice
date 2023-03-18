@@ -3,7 +3,7 @@ package com.votemetric.biometricchoice.security.filter;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.votemetric.biometricchoice.dto.UserDTO;
+import com.votemetric.biometricchoice.dto.AdminDTO;
 import com.votemetric.biometricchoice.security.SecurityConstants;
 import com.votemetric.biometricchoice.security.manager.CustomAuthenticationManager;
 import lombok.AllArgsConstructor;
@@ -29,7 +29,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
         try {
-            UserDTO user = new ObjectMapper().readValue(request.getInputStream(), UserDTO.class);
+            AdminDTO user = new ObjectMapper().readValue(request.getInputStream(), AdminDTO.class);
             Authentication authentication = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
             return authenticationManager.authenticate(authentication);
         } catch (IOException e) {

@@ -10,7 +10,7 @@ import javax.validation.constraints.NotBlank;
 @Setter
 @ToString
 @EqualsAndHashCode
-public class UserDTO {
+public class AdminDTO {
     private long id;
     @NotBlank(message = "username cannot be blank")
     @NonNull

@@ -1,13 +1,13 @@
 package com.votemetric.biometricchoice.interfaces;
 
 
-import com.votemetric.biometricchoice.dto.UserDTO;
+import com.votemetric.biometricchoice.dto.AdminDTO;
 
 public interface IUserService {
-    UserDTO getUser(Long id);
+    AdminDTO getUser(Long id);
 
-    UserDTO getUser(String username);
+    AdminDTO getUser(String username);
 
-    UserDTO saveUser(UserDTO user);
+    AdminDTO saveUser(AdminDTO user);
 
 }

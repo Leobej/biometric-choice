@@ -2,8 +2,8 @@ package com.votemetric.biometricchoice.controller;
 
 
 
-import com.votemetric.biometricchoice.dto.UserDTO;
-import com.votemetric.biometricchoice.service.UserService;
+import com.votemetric.biometricchoice.dto.AdminDTO;
+import com.votemetric.biometricchoice.service.AdminService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,19 +14,18 @@ import javax.validation.Valid;
 @AllArgsConstructor
 @RestController
 @RequestMapping(path = "/api/user")
-public class UserController {
+public class AdminController {
 
-
-    UserService userService;
+    AdminService adminService;
 
     @GetMapping("/{id}")
     public ResponseEntity<String> findById(@PathVariable Long id) {
-        return new ResponseEntity<>(userService.getUser(id).getUsername(), HttpStatus.OK);
+        return new ResponseEntity<>(adminService.getUser(id).getUsername(), HttpStatus.OK);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<HttpStatus> createUser(@Valid @RequestBody UserDTO user) {
-        userService.saveUser(user);
+    public ResponseEntity<HttpStatus> createUser(@Valid @RequestBody AdminDTO user) {
+        adminService.saveUser(user);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
