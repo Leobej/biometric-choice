@@ -24,4 +24,9 @@ public class GeneralExceptionHandler {
         logger.debug("Exception handled:" + e.getMessage() + " with http status: ");
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(value={EntityNotFoundException.class})
+    public static ResponseEntity<Object> handleEntityNotFoundException(ConstraintViolationException e) {
+        logger.debug("Exception handled:" + e.getMessage() + " with http status: ");
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }

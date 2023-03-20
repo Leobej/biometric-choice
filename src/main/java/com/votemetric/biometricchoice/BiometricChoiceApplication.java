@@ -29,36 +29,49 @@ public class BiometricChoiceApplication {
     }
 
     //receive from broker
-    @Bean
-    public MessageChannel mqttInputChannel() {
-        return new DirectChannel();
-    }
-
-    @Bean
-    public MessageProducer inbound() {
-        MqttPahoMessageDrivenChannelAdapter adapter =
-                new MqttPahoMessageDrivenChannelAdapter("tcp://localhost:1883", "testClient",
-                        "test/topic");
-        adapter.setCompletionTimeout(5000);
-        adapter.setConverter(new DefaultPahoMessageConverter());
-        adapter.setQos(1);
-        adapter.setOutputChannel(mqttInputChannel());
-        return adapter;
-    }
-
-    @Bean
-    @ServiceActivator(inputChannel = "mqttInputChannel")
-    public MessageHandler handler() {
-        return new MessageHandler() {
-            @Override
-            public void handleMessage(Message<?> message) throws MessagingException {
-                System.out.println(message.getPayload());
-                JSONObject json = new JSONObject(message.getPayload().toString());
-                System.out.println(json.toString());
-                String firstname = json.getString("Firstname");
-                System.out.println(firstname);
-            }
-        };
-    }
+//    @Bean
+//    public MessageChannel mqttInputChannel() {
+//        return new DirectChannel();
+//    }
+//
+//    @Bean
+//    public MessageProducer inbound() {
+//        MqttPahoMessageDrivenChannelAdapter adapter =
+//                new MqttPahoMessageDrivenChannelAdapter("tcp://localhost:1883", "testClient",
+//                        "test/topic");
+//        try {
+//            adapter.setCompletionTimeout(5000);
+//            adapter.setConverter(new DefaultPahoMessageConverter());
+//            adapter.setQos(1);
+//            adapter.setOutputChannel(mqttInputChannel());
+//
+//        }catch (Exception e)
+//        {
+//            System.out.println("Mqtt Message didn't arrived");
+//        }
+//        return adapter;
+//
+//    }
+//
+//    @Bean
+//    @ServiceActivator(inputChannel = "mqttInputChannel")
+//    public MessageHandler handler() {
+//        return new MessageHandler() {
+//            @Override
+//            public void handleMessage(Message<?> message)  {
+//                try {
+//                    System.out.println(message.getPayload());
+//                    JSONObject json = new JSONObject(message.getPayload().toString());
+//                    System.out.println(json.toString());
+//                    String firstname = json.getString("Firstname");
+//                    System.out.println(firstname);
+//                }
+//                catch (Exception e)
+//                {
+//                    System.out.println("Exception in getting message from topic");
+//                }
+//            }
+//        };
+//    }
 
 }
