@@ -1,4 +1,7 @@
 package com.votemetric.biometricchoice.repository;
 
-public interface ElectionResultRepository {
+import com.votemetric.biometricchoice.entity.ElectionResult;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ElectionResultRepository extends JpaRepository<ElectionResult,Long> {
 }

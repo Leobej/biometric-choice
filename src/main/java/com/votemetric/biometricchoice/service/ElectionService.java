@@ -47,10 +47,10 @@ public class ElectionService implements IElectionService {
 
     @Override
     public ElectionDTO createElection(ElectionDTO electionDto) {
-        Candidate candidate = candidateRepository.findById(electionDto.getCandidateId())
-                .orElseThrow(() -> new EntityNotFoundException("Candidate with id " + electionDto.getCandidateId() + " not found."));
-        Voter voter = voterRepository.findById(electionDto.getVoterId())
-                .orElseThrow(() -> new EntityNotFoundException("Voter with id " + electionDto.getVoterId() + " not found."));
+//        Candidate candidate = candidateRepository.findById(electionDto.getCandidateId())
+//                .orElseThrow(() -> new EntityNotFoundException("Candidate with id " + electionDto.getCandidateId() + " not found."));
+//        Voter voter = voterRepository.findById(electionDto.getVoterId())
+//                .orElseThrow(() -> new EntityNotFoundException("Voter with id " + electionDto.getVoterId() + " not found."));
 
         Election election = mapper.convertToType(electionDto, Election.class);
         election.setCreatedAt(LocalDateTime.now());
@@ -59,8 +59,10 @@ public class ElectionService implements IElectionService {
     }
 
     @Override
-    public ElectionDTO updateElection() {
-
+    public ElectionDTO updateElection(ElectionDTO electionDto) {
+        electionRepository.existsById(electionDto.getElectionId());
+        electionRepository.save(mapper.convertToType(electionDto, Election.class));
+        return electionDto;
     }
 
     @Override

@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class VoterHistoryDTO {
+    private long historyId;
     private long voterId;
     private Long electionId;
     private Long candidateId;

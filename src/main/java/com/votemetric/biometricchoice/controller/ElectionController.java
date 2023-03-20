@@ -33,15 +33,13 @@ public class ElectionController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ElectionDTO> updateElection(@PathVariable("id") Long id, @RequestBody ElectionDTO electionDto) {
-
-        Election updatedElection = electionService.update(id, electionDto);
-        ElectionDTO updatedElectionDto = mapper.convertToType(updatedElection, ElectionDTO.class);
+        ElectionDTO updatedElectionDto =  electionService.updateElection(electionDto);
         return ResponseEntity.ok(updatedElectionDto);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteElection(@PathVariable("id") Long id) {
-        electionService.deleteElection(id);
+        electionService.deleteElectionById(id);
         return ResponseEntity.noContent().build();
     }
 }

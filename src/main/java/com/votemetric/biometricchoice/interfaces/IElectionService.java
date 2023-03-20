@@ -11,7 +11,7 @@ public interface IElectionService {
 
     ElectionDTO createElection(ElectionDTO electionDto);
 
-    ElectionDTO updateElection();
+    ElectionDTO updateElection(ElectionDTO electionDTO);
 
     void deleteElectionById(Long electionId);
 }
