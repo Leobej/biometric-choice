@@ -17,16 +17,27 @@ import java.time.LocalDateTime;
 public class VoterHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long voterId;
-    @Column(nullable = false)
-    private Long electionId;
-    @Column(nullable = false)
-    private Long candidateId;
+    private long voterHistoryId;
+    @ManyToOne
+    @JoinColumn(name = "voter_id")
+    private Voter voter;
+
+    @ManyToOne
+    @JoinColumn(name = "election_id")
+    private Election election;
+
+    @ManyToOne
+    @JoinColumn(name = "candidate_id")
+    private Candidate candidate;
+
     @Column(nullable = false)
     private LocalDateTime dateVoted;
-    @Column(nullable = false, unique = true)
-    private String location;
-    @Column(nullable = false, unique = true)
-    private boolean voteStatus;
 
+    @ManyToOne
+    @JoinColumn(name = "location_id")
+    private Location location;
+
+    @Column(nullable = false)
+    private boolean voteStatus;
 }
+

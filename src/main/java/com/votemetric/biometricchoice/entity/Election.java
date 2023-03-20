@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "elections")
@@ -18,15 +19,25 @@ public class Election {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long electionId;
-    @Column(nullable = false)
-    private Long voterId;
-    @Column(nullable = false)
-    private Long candidateId;
+
+    @ManyToOne
+    @JoinColumn(name = "voter_id")
+    private Voter voter;
+
+    @ManyToOne
+    @JoinColumn(name = "candidate_id")
+    private Candidate candidate;
+
     @Column(nullable = false)
     private String firstname;
+
     @Column(nullable = false)
     private String location;
+
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    // Relationships
+    @OneToMany(mappedBy = "election")
+    private List<ElectionResult> electionResults;
 }

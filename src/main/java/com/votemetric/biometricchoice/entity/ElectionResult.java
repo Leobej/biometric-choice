@@ -17,13 +17,19 @@ public class ElectionResult {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long electionResultsId;
-    @Column(nullable = false)
-    private Long electionId;
-    @Column(nullable = false)
-    private Long candidateId;
+
+    @ManyToOne
+    @JoinColumn(name = "election_id")
+    private Election election;
+
+    @ManyToOne
+    @JoinColumn(name = "candidate_id")
+    private Candidate candidate;
+
     @Column(nullable = false)
     private Long votes;
+
     @Column(nullable = false)
     private Double percentage;
-
 }
+
