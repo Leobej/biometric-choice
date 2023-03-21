@@ -1,12 +1,13 @@
 package com.votemetric.biometricchoice.controller;
 
 import com.votemetric.biometricchoice.dto.ElectionDTO;
-import com.votemetric.biometricchoice.entity.Election;
 import com.votemetric.biometricchoice.interfaces.IElectionService;
 import com.votemetric.biometricchoice.mapper.Mapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/elections")
@@ -17,6 +18,12 @@ public class ElectionController {
     public ElectionController(IElectionService electionService, Mapper mapper) {
         this.electionService = electionService;
         this.mapper = mapper;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ElectionDTO>> getAllElections() {
+        List<ElectionDTO> elections = electionService.getAllElections();
+        return ResponseEntity.ok(elections);
     }
 
     @GetMapping("/{id}")
@@ -31,8 +38,8 @@ public class ElectionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedElectionDto);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ElectionDTO> updateElection(@PathVariable("id") Long id, @RequestBody ElectionDTO electionDto) {
+    @PutMapping
+    public ResponseEntity<ElectionDTO> updateElection(@RequestBody ElectionDTO electionDto) {
         ElectionDTO updatedElectionDto =  electionService.updateElection(electionDto);
         return ResponseEntity.ok(updatedElectionDto);
     }

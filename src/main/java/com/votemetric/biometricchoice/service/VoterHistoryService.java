@@ -3,6 +3,8 @@ package com.votemetric.biometricchoice.service;
 
 import com.votemetric.biometricchoice.dto.VoterHistoryDTO;
 import com.votemetric.biometricchoice.entity.VoterHistory;
+import com.votemetric.biometricchoice.exception.LocationNotFoundException;
+import com.votemetric.biometricchoice.exception.VoterHistoryNotFoundException;
 import com.votemetric.biometricchoice.interfaces.IVoterHistoryService;
 import com.votemetric.biometricchoice.mapper.Mapper;
 import com.votemetric.biometricchoice.repository.VoterHistoryRepository;
@@ -31,10 +33,10 @@ public class VoterHistoryService implements IVoterHistoryService {
     }
 
     @Override
-    public VoterHistoryDTO getVoterHistoryById(long voterId) {
-        Optional<VoterHistory> optionalVoterHistory = voterHistoryRepository.findById(voterId);
-        return optionalVoterHistory.map(voterHistory -> mapper.convertToType(voterHistory, VoterHistoryDTO.class))
-                .orElse(null);
+    public VoterHistoryDTO getVoterHistoryById(Long voterId) {
+        VoterHistory voterHistory = findVoterHistoryById(voterId);
+        return mapper.convertToType(voterHistory, VoterHistoryDTO.class);
+
     }
 
     @Override
@@ -44,21 +46,30 @@ public class VoterHistoryService implements IVoterHistoryService {
         return mapper.convertToType(savedVoterHistory, VoterHistoryDTO.class);
     }
 
-    public VoterHistoryDTO updateVoterHistory( VoterHistoryDTO voterHistoryDTO) {
-        Optional<VoterHistory> optionalVoterHistory = voterHistoryRepository.findById(voterHistoryDTO.getHistoryId());
-        if (optionalVoterHistory.isPresent()) {
-            VoterHistory voterHistory = optionalVoterHistory.get();
-            mapper.convertToType(voterHistoryDTO, VoterHistory.class);
-            VoterHistory updatedVoterHistory = voterHistoryRepository.save(voterHistory);
-            return mapper.convertToType(updatedVoterHistory, VoterHistoryDTO.class);
-        } else {
-            return null;
-        }
+    public VoterHistoryDTO updateVoterHistory(VoterHistoryDTO voterHistoryDTO) {
+        checkIfVoterHistoryExists(voterHistoryDTO.getHistoryId());
+        VoterHistory voterHistory = mapper.convertToType(voterHistoryDTO, VoterHistory.class);
+        VoterHistory updatedVoterHistory = voterHistoryRepository.save(voterHistory);
+        return mapper.convertToType(updatedVoterHistory, VoterHistoryDTO.class);
     }
 
+
     @Override
-    public void deleteVoterHistoryById(long voterId) {
-        voterHistoryRepository.deleteById(voterId);
+    public void deleteVoterHistoryById(Long voterHistoryId) {
+        checkIfVoterHistoryExists(voterHistoryId);
+        voterHistoryRepository.deleteById(voterHistoryId);
+    }
+
+    VoterHistory findVoterHistoryById(Long voterHistoryId) {
+        return voterHistoryRepository.findById(voterHistoryId).orElseThrow(
+                () -> new VoterHistoryNotFoundException(voterHistoryId));
+    }
+
+    private void checkIfVoterHistoryExists(Long voterHistoryId) {
+        boolean exists = voterHistoryRepository.existsById(voterHistoryId);
+        if (!exists) {
+            throw new VoterHistoryNotFoundException(voterHistoryId);
+        }
     }
 }
 

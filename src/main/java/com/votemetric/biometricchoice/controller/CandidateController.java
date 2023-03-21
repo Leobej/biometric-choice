@@ -34,9 +34,9 @@ public class CandidateController {
         return new ResponseEntity<>(candidate, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<CandidateDTO> updateCandidate(@PathVariable("id") Long id, @RequestBody CandidateDTO candidateDTO) {
-        CandidateDTO candidate = candidateService.updateCandidate(id, candidateDTO);
+    @PutMapping()
+    public ResponseEntity<CandidateDTO> updateCandidate(@RequestBody CandidateDTO candidateDTO) {
+        CandidateDTO candidate = candidateService.updateCandidate(candidateDTO);
         return new ResponseEntity<>(candidate, HttpStatus.OK);
     }
 

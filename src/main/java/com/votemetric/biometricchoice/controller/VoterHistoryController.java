@@ -7,8 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/votershistory")
+@RequestMapping("/voters-history")
 public class VoterHistoryController {
     private final IVoterHistoryService voterHistoryService;
     private final Mapper mapper;
@@ -20,19 +22,24 @@ public class VoterHistoryController {
 
     @GetMapping("/{id}")
     public ResponseEntity<VoterHistoryDTO> getVoterHistoryById(@PathVariable("id") Long id) {
-        VoterHistoryDTO voterHistoryDTO = mapper.convertToType(voterHistoryService.getVoterHistoryById(id), VoterHistoryDTO.class);
+        VoterHistoryDTO voterHistoryDTO = voterHistoryService.getVoterHistoryById(id);
         return ResponseEntity.ok(voterHistoryDTO);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<VoterHistoryDTO>> getAllVoterHistory() {
+        return ResponseEntity.ok(voterHistoryService.getAllVoterHistory());
     }
 
     @PostMapping
     public ResponseEntity<VoterHistoryDTO> createVoterHistory(@RequestBody VoterHistoryDTO voterHistoryDTO) {
-        VoterHistoryDTO savedVoterHistoryDTO = mapper.convertToType(voterHistoryService.saveVoterHistory(voterHistoryDTO), VoterHistoryDTO.class);
+        VoterHistoryDTO savedVoterHistoryDTO = voterHistoryService.saveVoterHistory(voterHistoryDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedVoterHistoryDTO);
     }
 
     @PutMapping
     public ResponseEntity<VoterHistoryDTO> updateVoterHistory(@RequestBody VoterHistoryDTO voterHistoryDTO) {
-        VoterHistoryDTO updatedVoterHistoryDTO = mapper.convertToType(voterHistoryService.updateVoterHistory(voterHistoryDTO), VoterHistoryDTO.class);
+        VoterHistoryDTO updatedVoterHistoryDTO = voterHistoryService.updateVoterHistory(voterHistoryDTO);
         return ResponseEntity.ok(updatedVoterHistoryDTO);
     }
 

@@ -2,8 +2,6 @@ package com.votemetric.biometricchoice.controller;
 
 import com.votemetric.biometricchoice.dto.ElectionResultDTO;
 import com.votemetric.biometricchoice.interfaces.IElectionResultService;
-import com.votemetric.biometricchoice.service.ElectionResultService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,15 +1,18 @@
 package com.votemetric.biometricchoice.service;
 
 
+import com.votemetric.biometricchoice.dto.ElectionDTO;
 import com.votemetric.biometricchoice.dto.ElectionResultDTO;
+import com.votemetric.biometricchoice.entity.Election;
 import com.votemetric.biometricchoice.entity.ElectionResult;
+import com.votemetric.biometricchoice.exception.ElectionNotFoundException;
+import com.votemetric.biometricchoice.exception.ElectionResultNotFoundException;
 import com.votemetric.biometricchoice.exception.EntityNotFoundException;
 import com.votemetric.biometricchoice.interfaces.IElectionResultService;
 import com.votemetric.biometricchoice.mapper.Mapper;
 import com.votemetric.biometricchoice.repository.ElectionResultRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,8 +30,8 @@ public class ElectionResultService implements IElectionResultService {
 
 
     @Override
-    public ElectionResultDTO getElectionResultById(Long electionId) {
-        ElectionResult election = electionResultRepository.findById(electionId).orElseThrow(() -> new EntityNotFoundException("Election with id " + electionId + " not found."));
+    public ElectionResultDTO getElectionResultById(Long electionResultId) {
+        ElectionResult election = findElectionResultById(electionResultId);
         return mapper.convertToType(election, ElectionResultDTO.class);
     }
 
@@ -41,27 +44,35 @@ public class ElectionResultService implements IElectionResultService {
     }
 
     @Override
-    public ElectionResultDTO createElectionResult(ElectionResultDTO electionDto) {
-//        Candidate candidate = candidateRepository.findById(electionDto.getCandidateId())
-//                .orElseThrow(() -> new EntityNotFoundException("Candidate with id " + electionDto.getCandidateId() + " not found."));
-//        Voter voter = voterRepository.findById(electionDto.getVoterId())
-//                .orElseThrow(() -> new EntityNotFoundException("Voter with id " + electionDto.getVoterId() + " not found."));
-
-        ElectionResult election = mapper.convertToType(electionDto, ElectionResult.class);
-        ElectionResult savedElection = electionResultRepository.save(election);
-        return mapper.convertToType(savedElection, ElectionResultDTO.class);
+    public ElectionResultDTO createElectionResult(ElectionResultDTO electionResultDTO) {
+        ElectionResult election = mapper.convertToType(electionResultDTO, ElectionResult.class);
+        ElectionResult savedElectionResult = electionResultRepository.save(election);
+        return mapper.convertToType(savedElectionResult, ElectionResultDTO.class);
     }
 
     @Override
-    public ElectionResultDTO updateElectionResult(ElectionResultDTO electionDto) {
-        electionResultRepository.existsById(electionDto.getElectionId());
-        electionResultRepository.save(mapper.convertToType(electionDto, ElectionResult.class));
-        return electionDto;
+    public ElectionResultDTO updateElectionResult(ElectionResultDTO electionResultDTO) {
+        checkIfElectionResultExists(electionResultDTO.getElectionId());
+        ElectionResult electionResult = mapper.convertToType(electionResultDTO, ElectionResult.class);
+        ElectionResult savedElectionResult = electionResultRepository.save(electionResult);
+        return mapper.convertToType(savedElectionResult, ElectionResultDTO.class);
     }
 
     @Override
-    public void deleteElectionResultById(Long electionId) {
+    public void deleteElectionResultById(Long electionResultId) {
+        checkIfElectionResultExists(electionResultId);
+        electionResultRepository.deleteById(electionResultId);
+    }
 
-        electionResultRepository.deleteById(electionId);
+    ElectionResult findElectionResultById(Long electionResultId) {
+        return electionResultRepository.findById(electionResultId).orElseThrow(
+                () -> new ElectionResultNotFoundException(electionResultId));
+    }
+
+    void checkIfElectionResultExists(Long id) {
+        boolean exists = electionResultRepository.existsById(id);
+        if (!exists) {
+            throw new ElectionResultNotFoundException(id);
+        }
     }
 }

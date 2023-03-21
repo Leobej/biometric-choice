@@ -13,7 +13,9 @@ import javax.validation.ConstraintViolationException;
 public class GeneralExceptionHandler {
     private static final Logger logger = LoggerFactory.getLogger(GeneralExceptionHandler.class);
 
-    @ExceptionHandler(value = {ApiException.class})
+    @ExceptionHandler(value = {CandidateNotFoundException.class, ElectionNotFoundException.class, ElectionResultNotFoundException.class
+            , LocationNotFoundException.class, VoterHistoryNotFoundException.class, VoterNotFoundException.class
+    })
     public static ResponseEntity<Object> handleExceptions(ApiException e) {
         logger.debug("Exception handled:" + e.getMessage() + " with http status: " + e.getHttpStatus());
         return new ResponseEntity<>(e.getMessage(), e.getHttpStatus());
@@ -24,7 +26,8 @@ public class GeneralExceptionHandler {
         logger.debug("Exception handled:" + e.getMessage() + " with http status: ");
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
-    @ExceptionHandler(value={EntityNotFoundException.class})
+
+    @ExceptionHandler(value = {EntityNotFoundException.class})
     public static ResponseEntity<Object> handleEntityNotFoundException(ConstraintViolationException e) {
         logger.debug("Exception handled:" + e.getMessage() + " with http status: ");
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

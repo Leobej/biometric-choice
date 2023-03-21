@@ -2,6 +2,7 @@ package com.votemetric.biometricchoice.service;
 
 import com.votemetric.biometricchoice.dto.CandidateDTO;
 import com.votemetric.biometricchoice.entity.Candidate;
+import com.votemetric.biometricchoice.exception.CandidateNotFoundException;
 import com.votemetric.biometricchoice.exception.EntityNotFoundException;
 import com.votemetric.biometricchoice.interfaces.ICandidateService;
 import com.votemetric.biometricchoice.mapper.Mapper;
@@ -34,7 +35,7 @@ public class CandidateService implements ICandidateService {
     }
 
     @Override
-    public CandidateDTO getCandidateById(Long id) throws EntityNotFoundException {
+    public CandidateDTO getCandidateById(Long id) throws CandidateNotFoundException {
         Candidate candidate = findCandidateById(id);
         return mapper.convertToType(candidate, CandidateDTO.class);
     }
@@ -42,29 +43,33 @@ public class CandidateService implements ICandidateService {
     @Override
     public CandidateDTO addCandidate(CandidateDTO candidateDTO) {
         Candidate candidate = mapper.convertToType(candidateDTO, Candidate.class);
-        candidate.setCreatedAt(LocalDateTime.now());
-        candidate = candidateRepository.save(candidate);
-        return mapper.convertToType(candidate, CandidateDTO.class);
+        Candidate savedCandidate = candidateRepository.save(candidate);
+        return mapper.convertToType(savedCandidate, CandidateDTO.class);
     }
 
     @Override
-    public CandidateDTO updateCandidate(Long id, CandidateDTO candidateDTO) throws EntityNotFoundException {
-        Candidate candidate = findCandidateById(id);
+    public CandidateDTO updateCandidate(CandidateDTO candidateDTO)  {
+        checkIfCandidateExist(candidateDTO.getCandidateId());
         Candidate candidateSave = mapper.convertToType(candidateDTO, Candidate.class);
-        candidateSave.setCreatedAt(candidate.getCreatedAt());
         candidateRepository.save(candidateSave);
         return candidateDTO;
     }
 
     @Override
-    public void deleteCandidate(Long id) throws EntityNotFoundException {
-        Candidate candidate = candidateRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Candidate not found with id: " + id));
-        candidateRepository.delete(candidate);
+    public void deleteCandidate(Long id) {
+        checkIfCandidateExist(id);
+        candidateRepository.deleteById(id);
     }
 
     Candidate findCandidateById(Long id) {
         return candidateRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Candidate not found with id: " + id));
+                .orElseThrow(() -> new CandidateNotFoundException(id));
+    }
+
+    void checkIfCandidateExist(Long id) {
+        boolean exists = candidateRepository.existsById(id);
+        if (!exists) {
+            throw new CandidateNotFoundException(id);
+        }
     }
 }

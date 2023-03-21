@@ -12,7 +12,7 @@ public interface ICandidateService {
 
     CandidateDTO addCandidate(CandidateDTO candidateDTO);
 
-    CandidateDTO updateCandidate(Long id, CandidateDTO candidateDTO);
+    CandidateDTO updateCandidate(CandidateDTO candidateDTO);
 
     void deleteCandidate(Long id);
 }

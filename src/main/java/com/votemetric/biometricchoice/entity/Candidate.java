@@ -33,7 +33,7 @@ public class Candidate {
     private String position;
 
     @Column(nullable = false)
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt=LocalDateTime.now();
 
     // Relationships
     @OneToMany(mappedBy = "candidate")

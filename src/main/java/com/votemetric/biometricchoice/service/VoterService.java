@@ -1,9 +1,10 @@
 package com.votemetric.biometricchoice.service;
 
 import com.votemetric.biometricchoice.dto.VoterDTO;
-
 import com.votemetric.biometricchoice.entity.Voter;
 import com.votemetric.biometricchoice.exception.EntityNotFoundException;
+import com.votemetric.biometricchoice.exception.VoterHistoryNotFoundException;
+import com.votemetric.biometricchoice.exception.VoterNotFoundException;
 import com.votemetric.biometricchoice.interfaces.IVoterService;
 import com.votemetric.biometricchoice.mapper.Mapper;
 import com.votemetric.biometricchoice.repository.VoterRepository;
@@ -11,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,9 +31,8 @@ public class VoterService implements IVoterService {
     }
 
     @Override
-    public VoterDTO getVoterById(long voterId) {
-        Voter voter = voterRepository.findById(voterId).orElseThrow(
-                () -> new EntityNotFoundException(""));
+    public VoterDTO getVoterById(Long voterId) {
+        Voter voter = findVoterById(voterId);
         return mapper.convertToType(voter, VoterDTO.class);
     }
 
@@ -46,16 +45,28 @@ public class VoterService implements IVoterService {
 
     @Override
     public VoterDTO updateVoter(VoterDTO voterDTO) {
-        Voter voter = voterRepository.findById(voterDTO.getVoterId()).orElseThrow(
-                () -> new EntityNotFoundException("")
-        );
-        mapper.convertToType(voterDTO, Voter.class);
+        checkIfVoterExists(voterDTO.getVoterId());
+        Voter voter = mapper.convertToType(voterDTO, Voter.class);
         Voter updatedVoter = voterRepository.save(voter);
         return mapper.convertToType(updatedVoter, VoterDTO.class);
     }
 
     @Override
-    public void deleteVoterById(long voterId) {
+    public void deleteVoterById(Long voterId) {
+        checkIfVoterExists(voterId);
         voterRepository.deleteById(voterId);
     }
+
+    Voter findVoterById(Long voterId) {
+        return voterRepository.findById(voterId).orElseThrow(
+                () -> new VoterNotFoundException(voterId));
+    }
+
+    void checkIfVoterExists(Long voterId) {
+        boolean exists = voterRepository.existsById(voterId);
+        if (!exists) {
+            throw new VoterNotFoundException(voterId);
+        }
+    }
+
 }
