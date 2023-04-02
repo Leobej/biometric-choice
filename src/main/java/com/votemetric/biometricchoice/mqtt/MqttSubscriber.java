@@ -31,6 +31,11 @@ public class MqttSubscriber implements MessageHandler {
     public void handleMessage(Message<?> message) throws MessagingException {
         String payload = message.getPayload().toString();
         System.out.println(payload);
+        if(payload=="s-a reconectat")
+        {
+            System.out.println("Reconnect");
+            return;
+        }
         JSONObject jsonObject = new JSONObject(payload);
 
         int key = jsonObject.getInt("key");

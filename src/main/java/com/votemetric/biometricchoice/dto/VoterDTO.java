@@ -15,6 +15,6 @@ public class VoterDTO {
     private String lastname;
     private String password;
     private String cnp;
-    private String fingerPrint;
+    private String fingerprint;
     private String createdAt;
 }
