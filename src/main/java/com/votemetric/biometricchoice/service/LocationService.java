@@ -2,19 +2,15 @@ package com.votemetric.biometricchoice.service;
 
 
 import com.votemetric.biometricchoice.dto.LocationDTO;
-import com.votemetric.biometricchoice.dto.VoterHistoryDTO;
 import com.votemetric.biometricchoice.entity.Location;
-import com.votemetric.biometricchoice.entity.VoterHistory;
 import com.votemetric.biometricchoice.exception.EntityNotFoundException;
 import com.votemetric.biometricchoice.interfaces.ILocationService;
 import com.votemetric.biometricchoice.mapper.Mapper;
 import com.votemetric.biometricchoice.repository.LocationRepository;
-import com.votemetric.biometricchoice.repository.VoterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

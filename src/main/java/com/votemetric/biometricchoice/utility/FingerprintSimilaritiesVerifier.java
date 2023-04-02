@@ -13,8 +13,8 @@ public class FingerprintSimilaritiesVerifier {
 
         int max_dist = (int) Math.floor(Math.max(len1, len2) / 2) - 1;
         int match = 0;
-        int hash_s1[] = new int[s1.length()];
-        int hash_s2[] = new int[s2.length()];
+        int[] hash_s1 = new int[s1.length()];
+        int[] hash_s2 = new int[s2.length()];
         for (int i = 0; i < len1; i++) {
 
             for (int j = Math.max(0, i - max_dist);

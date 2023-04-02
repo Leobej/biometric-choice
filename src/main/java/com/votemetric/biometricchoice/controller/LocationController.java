@@ -2,7 +2,6 @@ package com.votemetric.biometricchoice.controller;
 
 import com.votemetric.biometricchoice.dto.LocationDTO;
 import com.votemetric.biometricchoice.interfaces.ILocationService;
-import com.votemetric.biometricchoice.service.FingerprintService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

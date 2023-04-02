@@ -2,8 +2,6 @@ package com.votemetric.biometricchoice.service;
 
 import com.votemetric.biometricchoice.dto.VoterDTO;
 import com.votemetric.biometricchoice.entity.Voter;
-import com.votemetric.biometricchoice.exception.EntityNotFoundException;
-import com.votemetric.biometricchoice.exception.VoterHistoryNotFoundException;
 import com.votemetric.biometricchoice.exception.VoterNotFoundException;
 import com.votemetric.biometricchoice.interfaces.IVoterService;
 import com.votemetric.biometricchoice.mapper.Mapper;

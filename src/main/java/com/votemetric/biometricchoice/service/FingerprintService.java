@@ -2,15 +2,12 @@ package com.votemetric.biometricchoice.service;
 
 
 import com.votemetric.biometricchoice.dto.FingerprintDTO;
-import com.votemetric.biometricchoice.dto.LocationDTO;
 import com.votemetric.biometricchoice.entity.Fingerprint;
-import com.votemetric.biometricchoice.entity.Location;
 import com.votemetric.biometricchoice.exception.ElectionNotFoundException;
 import com.votemetric.biometricchoice.exception.LocationNotFoundException;
 import com.votemetric.biometricchoice.interfaces.IFingerprintService;
 import com.votemetric.biometricchoice.mapper.Mapper;
 import com.votemetric.biometricchoice.repository.FingerprintRepository;
-import com.votemetric.biometricchoice.repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

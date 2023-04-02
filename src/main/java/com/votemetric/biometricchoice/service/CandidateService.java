@@ -3,14 +3,12 @@ package com.votemetric.biometricchoice.service;
 import com.votemetric.biometricchoice.dto.CandidateDTO;
 import com.votemetric.biometricchoice.entity.Candidate;
 import com.votemetric.biometricchoice.exception.CandidateNotFoundException;
-import com.votemetric.biometricchoice.exception.EntityNotFoundException;
 import com.votemetric.biometricchoice.interfaces.ICandidateService;
 import com.votemetric.biometricchoice.mapper.Mapper;
 import com.votemetric.biometricchoice.repository.CandidateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,7 +46,7 @@ public class CandidateService implements ICandidateService {
     }
 
     @Override
-    public CandidateDTO updateCandidate(CandidateDTO candidateDTO)  {
+    public CandidateDTO updateCandidate(CandidateDTO candidateDTO) {
         checkIfCandidateExist(candidateDTO.getCandidateId());
         Candidate candidateSave = mapper.convertToType(candidateDTO, Candidate.class);
         candidateRepository.save(candidateSave);

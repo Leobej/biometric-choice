@@ -3,7 +3,6 @@ package com.votemetric.biometricchoice.service;
 
 import com.votemetric.biometricchoice.dto.VoterHistoryDTO;
 import com.votemetric.biometricchoice.entity.VoterHistory;
-import com.votemetric.biometricchoice.exception.LocationNotFoundException;
 import com.votemetric.biometricchoice.exception.VoterHistoryNotFoundException;
 import com.votemetric.biometricchoice.interfaces.IVoterHistoryService;
 import com.votemetric.biometricchoice.mapper.Mapper;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

@@ -1,7 +1,6 @@
 package com.votemetric.biometricchoice.repository;
 
 
-
 import com.votemetric.biometricchoice.entity.Admin;
 import org.springframework.data.repository.CrudRepository;
 

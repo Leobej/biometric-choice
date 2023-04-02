@@ -40,7 +40,7 @@ public class ElectionController {
 
     @PutMapping
     public ResponseEntity<ElectionDTO> updateElection(@RequestBody ElectionDTO electionDto) {
-        ElectionDTO updatedElectionDto =  electionService.updateElection(electionDto);
+        ElectionDTO updatedElectionDto = electionService.updateElection(electionDto);
         return ResponseEntity.ok(updatedElectionDto);
     }
 

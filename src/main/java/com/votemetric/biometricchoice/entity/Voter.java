@@ -31,7 +31,7 @@ public class Voter {
     @Column(nullable = false, unique = true)
     private String cnp;
 
-    @Column(nullable = false, unique = true,length = 1024)
+    @Column(nullable = false, unique = true, length = 1024)
     private String fingerPrint;
 
     @Column(nullable = false)
