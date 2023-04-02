@@ -12,6 +12,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class FingerprintDTO {
     private Long id;
-
     private String fingerprint;
+    private String deviceId;
 }

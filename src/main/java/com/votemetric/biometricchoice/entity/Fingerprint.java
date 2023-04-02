@@ -1,9 +1,6 @@
 package com.votemetric.biometricchoice.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -13,6 +10,8 @@ import javax.persistence.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
+@EqualsAndHashCode
 public class Fingerprint {
 
     @Id
@@ -21,6 +20,10 @@ public class Fingerprint {
 
     @Column(name = "fingerprint", nullable = false, length = 1024)
     private String fingerprint;
+
+    @Column(name = "device_id", nullable = false)
+    private String deviceId;
+
 
     public Fingerprint(String fingerprint) {
         this.fingerprint = fingerprint;

@@ -34,8 +34,8 @@ public class MqttSubscriber implements MessageHandler {
         }
         JSONObject jsonObject = new JSONObject(payload);
 
-        int key = jsonObject.getInt("key");
-        String fingerprintChunk = jsonObject.getString("Fingerprint");
+
+        String fingerprintChunk = jsonObject.getString("fingerprint");
         totalChunks = 4;
         fingerprint = fingerprint + fingerprintChunk;
         receivedChunks++;
@@ -43,6 +43,8 @@ public class MqttSubscriber implements MessageHandler {
         if (receivedChunks == totalChunks) {
             Fingerprint fingerprintEntity = new Fingerprint();
             fingerprintEntity.setFingerprint(fingerprint);
+            fingerprintEntity.setDeviceId(jsonObject.getString("deviceId"));
+            System.out.println(fingerprintEntity);
             fingerprintRepository.save(fingerprintEntity);
             logger.info("Fingerprint saved: {}", fingerprint);
             fingerprint = "";
