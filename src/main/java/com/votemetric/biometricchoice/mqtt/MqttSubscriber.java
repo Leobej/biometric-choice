@@ -1,10 +1,13 @@
 package com.votemetric.biometricchoice.mqtt;
 
+import com.votemetric.biometricchoice.controller.FingerprintController;
 import com.votemetric.biometricchoice.entity.Fingerprint;
+import com.votemetric.biometricchoice.interfaces.IFingerprintService;
 import com.votemetric.biometricchoice.repository.FingerprintRepository;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessagingException;
 import org.springframework.stereotype.Service;
@@ -13,7 +16,8 @@ import javax.websocket.MessageHandler;
 
 @Service
 public class MqttSubscriber implements MessageHandler {
-
+    @Autowired
+    private FingerprintController fingerprintController;
     private final Logger logger = LoggerFactory.getLogger(MqttSubscriber.class);
     private final FingerprintRepository fingerprintRepository;
     private String fingerprint = "";

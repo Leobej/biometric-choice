@@ -28,8 +28,6 @@ public class Election {
     @JoinColumn(name = "candidate_id")
     private Candidate candidate;
 
-
-
     @Column(nullable = false)
     private String firstname;
 
