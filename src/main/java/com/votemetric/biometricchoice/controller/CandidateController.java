@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/candidates")
+
 public class CandidateController {
 
     @Autowired

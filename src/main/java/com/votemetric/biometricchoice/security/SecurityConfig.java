@@ -11,7 +11,12 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.List;
 
 @Configuration
 @AllArgsConstructor
@@ -26,15 +31,15 @@ public class SecurityConfig {
         http
                 .headers().frameOptions().disable()
                 .and()
+                .cors()
+                .and()
                 .csrf().disable()
                 .authorizeRequests().antMatchers().permitAll()
-                .antMatchers("/**").permitAll()
-//                .antMatchers("/h2/**").permitAll()
-//                .antMatchers("/v3/**").permitAll() //permit all methods starting with "/v3"
-//                .antMatchers("/swagger-ui/**").permitAll() //permit all methods starting with "/v3"
-//                .antMatchers("/api/**").permitAll() //permit all methods starting with "/v3"
-//                .antMatchers("/api-docs.yaml/**").permitAll() //permit all methods starting with "/v3"
-//                .antMatchers("/api/**").permitAll() //permit all methods starting with "/api"
+//                .antMatchers("/**").permitAll()
+                .antMatchers("/authenticate").permitAll()
+                .antMatchers("/h2/**").permitAll()
+                .antMatchers("/v3/**").permitAll() //permit all methods starting with "/v3"
+                .antMatchers("/swagger-ui/**").permitAll() //permit all methods starting with "/v3"
                 .antMatchers(HttpMethod.POST, SecurityConstants.REGISTER_PATH).permitAll()
                 .anyRequest().authenticated()
                 .and()
@@ -44,5 +49,6 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         return http.build();
     }
+
 
 }

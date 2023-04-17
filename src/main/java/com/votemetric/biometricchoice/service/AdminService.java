@@ -28,7 +28,7 @@ public class AdminService implements IAdminService {
     @Override
     public AdminDTO getUser(Long id) {
         Optional<Admin> user = adminRepository.findById(id);
-        return mapper.convertToType(user, AdminDTO.class);
+        return mapper.convertToType(user.get(), AdminDTO.class);
     }
 
     @Override

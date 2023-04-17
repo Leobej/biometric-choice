@@ -12,14 +12,15 @@ import javax.validation.Valid;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping(path = "/api/user")
+@RequestMapping(path = "/user")
 public class AdminController {
 
     AdminService adminService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<String> findById(@PathVariable Long id) {
-        return new ResponseEntity<>(adminService.getUser(id).getUsername(), HttpStatus.OK);
+    public ResponseEntity<AdminDTO> findById(@PathVariable Long id) {
+        AdminDTO adminDTO=adminService.getUser(id);
+        return new ResponseEntity<>(adminDTO, HttpStatus.OK);
     }
 
     @PostMapping("/register")
