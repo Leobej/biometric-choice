@@ -11,12 +11,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.List;
 
 @Configuration
 @AllArgsConstructor
@@ -34,21 +28,21 @@ public class SecurityConfig {
                 .cors()
                 .and()
                 .csrf().disable()
-                .authorizeRequests().antMatchers().permitAll()
-//                .antMatchers("/**").permitAll()
+                .authorizeRequests()
                 .antMatchers("/authenticate").permitAll()
                 .antMatchers("/h2/**").permitAll()
-                .antMatchers("/v3/**").permitAll() //permit all methods starting with "/v3"
-                .antMatchers("/swagger-ui/**").permitAll() //permit all methods starting with "/v3"
+                .antMatchers("/v3/**").permitAll()
+                .antMatchers("/swagger-ui/**").permitAll()
                 .antMatchers(HttpMethod.POST, SecurityConstants.REGISTER_PATH).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new ExceptionHandlerFilter(), AuthenticationFilter.class)
                 .addFilter(authenticationFilter)
-                .addFilterAfter(new JWTAuthorizationFilter(), AuthenticationFilter.class)
+                .addFilterBefore(new JWTAuthorizationFilter(), ExceptionHandlerFilter.class)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         return http.build();
     }
+
 
 
 }

@@ -18,9 +18,8 @@ public class AdminController {
     AdminService adminService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<AdminDTO> findById(@PathVariable Long id) {
-        AdminDTO adminDTO=adminService.getUser(id);
-        return new ResponseEntity<>(adminDTO, HttpStatus.OK);
+    public ResponseEntity<String> findById(@PathVariable Long id) {
+        return new ResponseEntity<>(adminService.getUser(id).getUsername(), HttpStatus.OK);
     }
 
     @PostMapping("/register")

@@ -7,6 +7,9 @@ import com.votemetric.biometricchoice.interfaces.IAdminService;
 import com.votemetric.biometricchoice.mapper.Mapper;
 import com.votemetric.biometricchoice.repository.AdminRepository;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +46,13 @@ public class AdminService implements IAdminService {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         adminRepository.save(user);
         return mapper.convertToType(user, AdminDTO.class);
+    }
+
+    public AdminDTO loadUserByUsername(String username) throws UsernameNotFoundException {
+        Admin admin = adminRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Invalid username or password"));
+
+        return mapper.convertToType(admin, AdminDTO.class);
     }
 
 }
