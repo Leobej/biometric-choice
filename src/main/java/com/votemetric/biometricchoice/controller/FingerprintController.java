@@ -1,6 +1,7 @@
 package com.votemetric.biometricchoice.controller;
 
 import com.votemetric.biometricchoice.dto.FingerprintDTO;
+import com.votemetric.biometricchoice.mqtt.MqttPublisher;
 import com.votemetric.biometricchoice.service.FingerprintService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,10 +16,12 @@ import java.util.List;
 public class FingerprintController {
 
     private final FingerprintService fingerprintService;
+    private final MqttPublisher mqttPublisher;
 
     @Autowired
-    public FingerprintController(FingerprintService fingerprintService) {
+    public FingerprintController(FingerprintService fingerprintService, MqttPublisher mqttPublisher) {
         this.fingerprintService = fingerprintService;
+        this.mqttPublisher = mqttPublisher;
     }
 
     @GetMapping("/{id}")
@@ -33,10 +36,26 @@ public class FingerprintController {
         return ResponseEntity.ok(fingerprints);
     }
 
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteFingerprintById(@PathVariable("id") Long id) {
         fingerprintService.deleteFingerprintById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping
+    public ResponseEntity<FingerprintDTO> addFingerprint(@RequestBody FingerprintDTO fingerprintDTO) {
+        FingerprintDTO createdFingerprintDTO = fingerprintService.createFingerprint(fingerprintDTO);
+        return new ResponseEntity<>(createdFingerprintDTO, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/getFingerprintId/{deviceId}")
+    public ResponseEntity<Long> getFingerprintId(@PathVariable ("deviceId")String deviceId) {
+        Long id = fingerprintService.getFingerprintByDeviceId(deviceId);
+        return ResponseEntity.ok(id);
+    }
+
+    @GetMapping("/nextFingerprint")
+    public void sendNextFingerprint() {
+        mqttPublisher.publish("inTopic", "nextFingerprint");
     }
 }

@@ -29,7 +29,7 @@ public class Election {
     private Candidate candidate;
 
     @Column(nullable = false)
-    private String firstname;
+    private String name;
 
     @Column(nullable = false)
     private String location;

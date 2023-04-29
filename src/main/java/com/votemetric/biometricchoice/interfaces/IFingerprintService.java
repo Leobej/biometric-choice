@@ -10,4 +10,8 @@ public interface IFingerprintService {
     List<FingerprintDTO> getFingerprints();
 
     void deleteFingerprintById(Long fingerprintId);
+
+    FingerprintDTO createFingerprint(FingerprintDTO fingerprintDTO);
+
+    Long getFingerprintByDeviceId(String deviceId);
 }

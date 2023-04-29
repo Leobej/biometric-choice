@@ -2,7 +2,6 @@ package com.votemetric.biometricchoice.mqtt;
 
 import com.votemetric.biometricchoice.controller.FingerprintController;
 import com.votemetric.biometricchoice.entity.Fingerprint;
-import com.votemetric.biometricchoice.interfaces.IFingerprintService;
 import com.votemetric.biometricchoice.repository.FingerprintRepository;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -28,8 +27,7 @@ public class MqttSubscriber implements MessageHandler {
         this.fingerprintRepository = fingerprintRepository;
     }
 
-
-    public void handleMessage(Message<?> message) throws MessagingException {
+    public void getFingerprint(Message<?> message) throws MessagingException {
         String payload = message.getPayload().toString();
         System.out.println(payload);
         if (payload == "s-a reconectat") {
@@ -37,7 +35,6 @@ public class MqttSubscriber implements MessageHandler {
             return;
         }
         JSONObject jsonObject = new JSONObject(payload);
-
 
         String fingerprintChunk = jsonObject.getString("fingerprint");
         totalChunks = 4;

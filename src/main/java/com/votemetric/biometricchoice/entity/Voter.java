@@ -43,4 +43,7 @@ public class Voter {
 
     @OneToMany(mappedBy = "voter")
     private List<VoterHistory> voterHistories;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "voter")
+    private List<Fingerprint> fingerprints;
 }

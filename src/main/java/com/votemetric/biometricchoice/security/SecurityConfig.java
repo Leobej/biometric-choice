@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
+
 @Configuration
 @AllArgsConstructor
 public class SecurityConfig {
@@ -28,21 +29,20 @@ public class SecurityConfig {
                 .cors()
                 .and()
                 .csrf().disable()
-                .authorizeRequests()
+                .authorizeRequests().antMatchers().permitAll()
+                .antMatchers(HttpMethod.POST, SecurityConstants.REGISTER_PATH).permitAll()
                 .antMatchers("/authenticate").permitAll()
                 .antMatchers("/h2/**").permitAll()
-                .antMatchers("/v3/**").permitAll()
-                .antMatchers("/swagger-ui/**").permitAll()
-                .antMatchers(HttpMethod.POST, SecurityConstants.REGISTER_PATH).permitAll()
+                .antMatchers("/v3/**").permitAll() //permit all methods starting with "/v3"
+                .antMatchers("/swagger-ui/**").permitAll() //permit all methods starting with "/v3"
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new ExceptionHandlerFilter(), AuthenticationFilter.class)
                 .addFilter(authenticationFilter)
-                .addFilterBefore(new JWTAuthorizationFilter(), ExceptionHandlerFilter.class)
+                .addFilterBefore(new JWTAuthorizationFilter(), AuthenticationFilter.class)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         return http.build();
     }
-
 
 
 }

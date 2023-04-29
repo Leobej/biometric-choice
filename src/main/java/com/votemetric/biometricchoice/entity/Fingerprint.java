@@ -24,13 +24,12 @@ public class Fingerprint {
     @Column(name = "device_id", nullable = false)
     private String deviceId;
 
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "voter_id")
+    private Voter voter;
     public Fingerprint(String fingerprint) {
         this.fingerprint = fingerprint;
     }
 
-    // Additional metadata fields as needed
-
-    // Constructor, getters and setters
 
 }

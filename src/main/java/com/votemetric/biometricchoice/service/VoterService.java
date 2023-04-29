@@ -43,7 +43,7 @@ public class VoterService implements IVoterService {
 
     @Override
     public VoterDTO updateVoter(VoterDTO voterDTO) {
-        checkIfVoterExists(voterDTO.getVoterId());
+        checkIfVoterWithFingerprintIdExists(voterDTO.getFingerprintId());
         Voter voter = mapper.convertToType(voterDTO, Voter.class);
         Voter updatedVoter = voterRepository.save(voter);
         return mapper.convertToType(updatedVoter, VoterDTO.class);
@@ -65,6 +65,13 @@ public class VoterService implements IVoterService {
         if (!exists) {
             throw new VoterNotFoundException(voterId);
         }
+    }
+    void checkIfVoterWithFingerprintIdExists(Long fingerprintID)
+    {
+//        boolean exists = voterRepository.existsByFingerprints(fingerprintID);
+//        if (!exists) {
+//            throw new VoterNotFoundException(fingerprintID);
+//        }
     }
 
 }

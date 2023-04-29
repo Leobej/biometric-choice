@@ -54,4 +54,17 @@ public class FingerprintService implements IFingerprintService {
             throw new LocationNotFoundException(fingerprintId);
         }
     }
+
+    public FingerprintDTO createFingerprint(FingerprintDTO fingerprintDTO) {
+        Fingerprint fingerprint = mapper.convertToType(fingerprintDTO, Fingerprint.class);
+        fingerprint = fingerprintRepository.save(fingerprint);
+        return mapper.convertToType(fingerprint, FingerprintDTO.class);
+    }
+
+    @Override
+    public Long getFingerprintByDeviceId(String deviceId) {
+        return fingerprintRepository.findLatestByDeviceId(deviceId).getId();
+    }
+
+
 }
