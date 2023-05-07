@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -35,10 +36,17 @@ public class Candidate {
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    @Lob
+    @Column(nullable = true, columnDefinition = "bytea")
+    @Type(type = "org.hibernate.type.BinaryType")
+    private byte[] image;
+
     // Relationships
     @OneToMany(mappedBy = "candidate")
     private List<Election> elections;
 
     @OneToMany(mappedBy = "candidate")
     private List<ElectionResult> electionResults;
+
+
 }

@@ -34,10 +34,4 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         }
     }
 
-//    @Override
-//    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-//        // Here, you can generate the JWT and set it as a response header, for example:
-//        // response.addHeader("Authorization", "Bearer " + jwt);
-//
-//    }
 }

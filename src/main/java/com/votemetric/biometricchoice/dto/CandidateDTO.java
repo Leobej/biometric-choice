@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -15,5 +16,6 @@ public class CandidateDTO {
     private String lastname;
     private String party;
     private String position;
+    private byte[] image;
 
 }
