@@ -9,4 +9,6 @@ public interface IAdminService {
     AdminDTO getUser(String username);
 
     AdminDTO saveUser(AdminDTO user);
+
+    AdminDTO loadUserByUsername(String username);
 }

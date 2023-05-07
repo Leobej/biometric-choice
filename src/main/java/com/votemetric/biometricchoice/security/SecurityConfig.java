@@ -1,5 +1,6 @@
 package com.votemetric.biometricchoice.security;
 
+import com.votemetric.biometricchoice.interfaces.IAdminService;
 import com.votemetric.biometricchoice.security.filter.AuthenticationFilter;
 import com.votemetric.biometricchoice.security.filter.ExceptionHandlerFilter;
 import com.votemetric.biometricchoice.security.filter.JWTAuthorizationFilter;
@@ -18,6 +19,8 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final CustomAuthenticationManager customAuthenticationManager;
+
+    private final IAdminService adminService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -39,7 +42,7 @@ public class SecurityConfig {
                 .and()
                 .addFilterBefore(new ExceptionHandlerFilter(), AuthenticationFilter.class)
                 .addFilter(authenticationFilter)
-                .addFilterBefore(new JWTAuthorizationFilter(), AuthenticationFilter.class)
+                .addFilterBefore(new JWTAuthorizationFilter(adminService), AuthenticationFilter.class)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         return http.build();
     }

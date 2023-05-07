@@ -2,7 +2,10 @@ package com.votemetric.biometricchoice.security.filter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.votemetric.biometricchoice.dto.AdminDTO;
+import com.votemetric.biometricchoice.interfaces.IAdminService;
 import com.votemetric.biometricchoice.security.SecurityConstants;
+import com.votemetric.biometricchoice.service.AdminService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +20,12 @@ import java.util.List;
 
 public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
+    private final IAdminService adminService;
+
+    public JWTAuthorizationFilter(IAdminService adminService) {
+        this.adminService = adminService;
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String header = request.getHeader(SecurityConstants.AUTHORIZATION);
@@ -26,14 +35,39 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
         }
 
         String token = header.replace(SecurityConstants.BEARER, "");
-        System.out.println(token);
-        String user = JWT.require(Algorithm.HMAC512(SecurityConstants.SECRET_KEY))
+        String username = JWT.require(Algorithm.HMAC512(SecurityConstants.SECRET_KEY))
                 .build()
                 .verify(token)
                 .getSubject();
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, List.of());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        filterChain.doFilter(request, response);
+        AdminDTO admin = adminService.loadUserByUsername(username);
+
+        if (isAuthorized(admin.getRole(), request)) {
+            Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, List.of());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            filterChain.doFilter(request, response);
+        } else {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.getWriter().write("You don't have permission to access this resource");
+            response.getWriter().flush();
+        }
+    }
+
+    private boolean isAuthorized(String role, HttpServletRequest request) {
+        String requestMethod = request.getMethod();
+        String requestURI = request.getRequestURI();
+
+        if (role.equals("ADMIN")) {
+            return true;
+        } else if (role.equals("USER")) {
+            if (requestMethod.equals("GET") && requestURI.startsWith("/fingerprints/getFingerprint")) {
+                return true;
+            }
+            if (requestMethod.equals("POST") && requestURI.startsWith("/voters/register")) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -32,7 +32,7 @@ public class VoterController {
         return ResponseEntity.ok(voterDTOList);
     }
 
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<VoterDTO> createVoter(@RequestBody VoterDTO voterDTO) {
         VoterDTO createdVoterDTO = voterService.saveVoter(voterDTO);
         return new ResponseEntity<>(createdVoterDTO, HttpStatus.CREATED);

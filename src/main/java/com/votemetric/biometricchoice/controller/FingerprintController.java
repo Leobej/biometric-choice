@@ -24,7 +24,7 @@ public class FingerprintController {
         this.mqttPublisher = mqttPublisher;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/getFingerprint/{id}")
     public ResponseEntity<FingerprintDTO> getFingerprintById(@PathVariable("id") Long id) {
         FingerprintDTO fingerprintDTO = fingerprintService.getFingerprintById(id);
         return ResponseEntity.ok(fingerprintDTO);
@@ -42,7 +42,7 @@ public class FingerprintController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PostMapping
+    @PostMapping()
     public ResponseEntity<FingerprintDTO> addFingerprint(@RequestBody FingerprintDTO fingerprintDTO) {
         FingerprintDTO createdFingerprintDTO = fingerprintService.createFingerprint(fingerprintDTO);
         return new ResponseEntity<>(createdFingerprintDTO, HttpStatus.CREATED);

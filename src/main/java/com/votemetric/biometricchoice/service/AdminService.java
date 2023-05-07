@@ -54,5 +54,4 @@ public class AdminService implements IAdminService {
 
         return mapper.convertToType(admin, AdminDTO.class);
     }
-
 }
