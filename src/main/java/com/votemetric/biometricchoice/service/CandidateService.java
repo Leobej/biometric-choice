@@ -1,6 +1,7 @@
 package com.votemetric.biometricchoice.service;
 
 import com.votemetric.biometricchoice.dto.CandidateDTO;
+import com.votemetric.biometricchoice.dto.CandidateNameDTO;
 import com.votemetric.biometricchoice.entity.Candidate;
 import com.votemetric.biometricchoice.exception.CandidateNotFoundException;
 import com.votemetric.biometricchoice.interfaces.ICandidateService;
@@ -59,6 +60,14 @@ public class CandidateService implements ICandidateService {
         candidateRepository.deleteById(id);
     }
 
+    @Override
+    public List<CandidateDTO> searchCandidates(String query) {
+        List<Candidate> candidates = candidateRepository.searchCandidates(query);
+        return candidates.stream()
+                .map((candidate) -> mapper.convertToType(candidate, CandidateDTO.class))
+                .collect(Collectors.toList());
+    }
+
     Candidate findCandidateById(Long id) {
         return candidateRepository.findById(id)
                 .orElseThrow(() -> new CandidateNotFoundException(id));
@@ -69,5 +78,9 @@ public class CandidateService implements ICandidateService {
         if (!exists) {
             throw new CandidateNotFoundException(id);
         }
+    }
+
+    public List<CandidateNameDTO> findCandidatesByFirstnameOrLastname(String query) {
+        return candidateRepository.findCandidatesByFirstnameOrLastname(query);
     }
 }

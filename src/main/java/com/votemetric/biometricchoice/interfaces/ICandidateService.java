@@ -15,4 +15,6 @@ public interface ICandidateService {
     CandidateDTO updateCandidate(CandidateDTO candidateDTO);
 
     void deleteCandidate(Long id);
+
+    List<CandidateDTO> searchCandidates(String query);
 }

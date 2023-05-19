@@ -7,6 +7,8 @@ import com.votemetric.biometricchoice.exception.ElectionResultNotFoundException;
 import com.votemetric.biometricchoice.interfaces.IElectionService;
 import com.votemetric.biometricchoice.mapper.Mapper;
 import com.votemetric.biometricchoice.repository.ElectionRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -37,6 +39,11 @@ public class ElectionService implements IElectionService {
         return elections.stream()
                 .map(election -> mapper.convertToType(election, ElectionDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    public Page<ElectionDTO> getAllElections(Pageable pageable) {
+        Page<Election> elections = electionRepository.findAll(pageable);
+        return elections.map(election -> mapper.convertToType(election, ElectionDTO.class));
     }
 
     @Override

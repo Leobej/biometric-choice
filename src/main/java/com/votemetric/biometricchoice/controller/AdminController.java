@@ -28,4 +28,11 @@ public class AdminController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @GetMapping("/user-role/{username}")
+    public String getUserRole(@PathVariable String username) {
+        return adminService.getUserRole(username);
+    }
+
+
+
 }

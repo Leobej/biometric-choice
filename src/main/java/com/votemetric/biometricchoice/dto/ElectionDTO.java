@@ -15,7 +15,7 @@ public class ElectionDTO {
     private Long electionId;
     private Long voterId;
     private Long candidateId;
-    private String firstname;
+    private String description;
     private String location;
     private LocalDateTime createdAt;
 }

@@ -54,4 +54,11 @@ public class AdminService implements IAdminService {
 
         return mapper.convertToType(admin, AdminDTO.class);
     }
+    public String getUserRole(String username) {
+        Admin admin = adminRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Invalid username or password"));
+
+        return admin.getRole();
+    }
+
 }

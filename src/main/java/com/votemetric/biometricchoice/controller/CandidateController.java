@@ -1,6 +1,7 @@
 package com.votemetric.biometricchoice.controller;
 
 import com.votemetric.biometricchoice.dto.CandidateDTO;
+import com.votemetric.biometricchoice.dto.CandidateNameDTO;
 import com.votemetric.biometricchoice.service.CandidateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,9 +38,7 @@ public class CandidateController {
             @RequestParam("lastName") String lastName,
             @RequestParam("party") String party,
             @RequestParam("position") String position,
-            @RequestParam("image") MultipartFile image)
-
-    {
+            @RequestParam("image") MultipartFile image) {
         byte[] imageBytes;
         try {
             imageBytes = image.getBytes();
@@ -62,5 +61,17 @@ public class CandidateController {
     public ResponseEntity<Void> deleteCandidate(@PathVariable("id") Long id) {
         candidateService.deleteCandidate(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<CandidateDTO>> searchCandidates(@RequestParam("query") String query) {
+        List<CandidateDTO> candidates = candidateService.searchCandidates(query);
+        return new ResponseEntity<>(candidates, HttpStatus.OK);
+    }
+
+    @GetMapping("/searchName")
+    public ResponseEntity<List<CandidateNameDTO>> findCandidatesByFirstnameOrLastname(@RequestParam("query") String query) {
+        List<CandidateNameDTO> candidates = candidateService.findCandidatesByFirstnameOrLastname(query);
+        return new ResponseEntity<>(candidates, HttpStatus.OK);
     }
 }
