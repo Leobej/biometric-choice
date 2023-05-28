@@ -26,16 +26,25 @@ public class ElectionController {
 //        return ResponseEntity.ok(elections);
 //    }
     @GetMapping("")
-    public ResponseEntity<Page<ElectionDTO>> getAllElections(Pageable pageable) {
-        Page<ElectionDTO> page = electionService.getAllElections(pageable);
+    public ResponseEntity<Page<ElectionDTO>> getAllElections(
+            @RequestParam(required = false) String description,
+            Pageable pageable) {
+        Page<ElectionDTO> page;
+        if (description != null) {
+            page = electionService.getElectionsByDescription(description, pageable);
+        } else {
+            page = electionService.getAllElections(pageable);
+        }
         return new ResponseEntity<>(page, HttpStatus.OK);
     }
+
 
         @GetMapping("/{id}")
         public ResponseEntity<ElectionDTO> getElectionById (@PathVariable("id") Long id){
             ElectionDTO electionDTO = electionService.getElectionById(id);
             return ResponseEntity.ok(electionDTO);
         }
+
 
         @PostMapping
         public ResponseEntity<ElectionDTO> createElection (@RequestBody ElectionDTO electionDto){

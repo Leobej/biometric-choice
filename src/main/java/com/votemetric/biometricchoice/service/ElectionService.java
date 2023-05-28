@@ -41,6 +41,13 @@ public class ElectionService implements IElectionService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public Page<ElectionDTO> getElectionsByDescription(String description, Pageable pageable) {
+        Page<Election> elections = electionRepository.findByDescriptionContaining(description, pageable);
+        return elections.map(election -> mapper.convertToType(election, ElectionDTO.class));
+    }
+
+
     public Page<ElectionDTO> getAllElections(Pageable pageable) {
         Page<Election> elections = electionRepository.findAll(pageable);
         return elections.map(election -> mapper.convertToType(election, ElectionDTO.class));

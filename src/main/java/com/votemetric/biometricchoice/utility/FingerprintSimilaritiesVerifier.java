@@ -1,7 +1,7 @@
 package com.votemetric.biometricchoice.utility;
 
 public class FingerprintSimilaritiesVerifier {
-     public double jaroDistance(String s1, String s2) {
+     public static double jaroDistance(String s1, String s2) {
         if (s1 == s2)
             return 1.0;
 
@@ -54,7 +54,7 @@ public class FingerprintSimilaritiesVerifier {
                 / 3.0;
     }
 
-    public double jaroWinkler(String s1, String s2) {
+    public static double jaroWinkler(String s1, String s2) {
         double jaroDistance = jaroDistance(s1, s2);
 
         if (jaroDistance > 0.7) {

@@ -10,7 +10,11 @@ public interface IElectionService {
     ElectionDTO getElectionById(Long electionId);
 
     List<ElectionDTO> getAllElections();
-     Page<ElectionDTO> getAllElections(Pageable pageable);
+
+    Page<ElectionDTO> getAllElections(Pageable pageable);
+
+    Page<ElectionDTO> getElectionsByDescription(String description, Pageable pageable);
+
 
     ElectionDTO createElection(ElectionDTO electionDto);
 
