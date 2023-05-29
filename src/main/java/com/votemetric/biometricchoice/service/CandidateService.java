@@ -8,6 +8,8 @@ import com.votemetric.biometricchoice.interfaces.ICandidateService;
 import com.votemetric.biometricchoice.mapper.Mapper;
 import com.votemetric.biometricchoice.repository.CandidateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,11 +28,16 @@ public class CandidateService implements ICandidateService {
     }
 
     @Override
-    public List<CandidateDTO> getAllCandidates() {
-        List<Candidate> candidates = candidateRepository.findAll();
-        return candidates.stream()
-                .map((candidate) -> mapper.convertToType(candidate, CandidateDTO.class))
-                .collect(Collectors.toList());
+    public Page<CandidateDTO> getAllCandidates(Pageable pageable) {
+        Page<Candidate> candidates = candidateRepository.findAll(pageable);
+        return candidates.map((candidate) -> mapper.convertToType(candidate, CandidateDTO.class));
+
+    }
+
+    @Override
+    public Page<CandidateDTO> getCandidateByName(String description, Pageable pageable) {
+        Page<Candidate> candidates = candidateRepository.getCandidatesByFirstname(description, pageable);
+        return candidates.map(candidate -> mapper.convertToType(candidate, CandidateDTO.class));
     }
 
     @Override

@@ -2,8 +2,11 @@ package com.votemetric.biometricchoice.controller;
 
 import com.votemetric.biometricchoice.dto.CandidateDTO;
 import com.votemetric.biometricchoice.dto.CandidateNameDTO;
+import com.votemetric.biometricchoice.dto.ElectionDTO;
 import com.votemetric.biometricchoice.service.CandidateService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +24,16 @@ public class CandidateController {
     private CandidateService candidateService;
 
     @GetMapping
-    public ResponseEntity<List<CandidateDTO>> getAllCandidates() {
-        List<CandidateDTO> candidates = candidateService.getAllCandidates();
-        return new ResponseEntity<>(candidates, HttpStatus.OK);
+    public ResponseEntity<Page<CandidateDTO>> getAllCandidates(
+            @RequestParam(required = false) String description,
+            Pageable pageable)  {
+        Page<CandidateDTO> page;
+        if (description != null) {
+            page = candidateService.getCandidateByName(description, pageable);
+        } else {
+            page = candidateService.getAllCandidates(pageable);
+        }
+        return new ResponseEntity<>(page, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

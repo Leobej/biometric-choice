@@ -2,6 +2,8 @@ package com.votemetric.biometricchoice.repository;
 
 import com.votemetric.biometricchoice.dto.CandidateNameDTO;
 import com.votemetric.biometricchoice.entity.Candidate;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -19,4 +21,7 @@ public interface CandidateRepository extends JpaRepository<Candidate, Long> {
     List<CandidateNameDTO> findCandidatesByFirstnameOrLastname(@Param("query") String query);
 
 
+    Page<Candidate> findByFirstnameContaining(String firstName, Pageable pageable);
+
+    Page<Candidate> getCandidatesByFirstname(String description, Pageable pageable);
 }
