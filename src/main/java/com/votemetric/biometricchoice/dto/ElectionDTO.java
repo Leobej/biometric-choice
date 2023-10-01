@@ -18,4 +18,6 @@ public class ElectionDTO {
     private String description;
     private String location;
     private LocalDateTime createdAt;
+
+    private Boolean active;
 }

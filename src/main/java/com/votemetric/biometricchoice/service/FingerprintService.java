@@ -42,9 +42,9 @@ public class FingerprintService implements IFingerprintService {
         fingerprintRepository.deleteById(fingerprintId);
     }
 
-    Fingerprint findFingerPrintById(Long locationId) {
-        return fingerprintRepository.findById(locationId).orElseThrow(
-                () -> new ElectionNotFoundException(locationId));
+    Fingerprint findFingerPrintById(Long fingerprintId) {
+        return fingerprintRepository.findById(fingerprintId).orElseThrow(
+                () -> new ElectionNotFoundException(fingerprintId));
     }
 
 

@@ -1,6 +1,5 @@
 package com.votemetric.biometricchoice.config;
 
-import com.votemetric.biometricchoice.utility.Utility;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,11 +31,6 @@ public class BeansConfiguration {
     @Bean
     public ModelMapper modelMapper() {
         return new ModelMapper();
-    }
-
-    @Bean
-    public Utility utility() {
-        return new Utility();
     }
 
     @Bean

@@ -34,6 +34,8 @@ public class Election {
     @Column(nullable = false)
     private String location;
 
+    private Boolean active;
+
     @Column(nullable = false)
     private LocalDateTime createdAt;
 

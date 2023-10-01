@@ -7,10 +7,11 @@ import com.votemetric.biometricchoice.interfaces.IVoterService;
 import com.votemetric.biometricchoice.mapper.Mapper;
 import com.votemetric.biometricchoice.repository.VoterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class VoterService implements IVoterService {
@@ -20,12 +21,19 @@ public class VoterService implements IVoterService {
     @Autowired
     private Mapper mapper;
 
+
+
     @Override
-    public List<VoterDTO> getAllVoters() {
-        List<Voter> voters = voterRepository.findAll();
-        return voters.stream()
-                .map(voter -> mapper.convertToType(voter, VoterDTO.class))
-                .collect(Collectors.toList());
+    public Page<VoterDTO> getAllVoters(Pageable pageable) {
+        Page<Voter> candidates = voterRepository.findAll(pageable);
+        return candidates.map((voter) -> mapper.convertToType(voter, VoterDTO.class));
+
+    }
+
+    @Override
+    public Page<VoterDTO> getVoterByName(String description, Pageable pageable) {
+        Page<Voter> candidates = voterRepository.getVotersByFirstname(description, pageable);
+        return candidates.map(voter -> mapper.convertToType(voter, VoterDTO.class));
     }
 
     @Override
@@ -66,8 +74,8 @@ public class VoterService implements IVoterService {
             throw new VoterNotFoundException(voterId);
         }
     }
-    void checkIfVoterWithFingerprintIdExists(Long fingerprintID)
-    {
+
+    void checkIfVoterWithFingerprintIdExists(Long fingerprintID) {
 //        boolean exists = voterRepository.existsByFingerprints(fingerprintID);
 //        if (!exists) {
 //            throw new VoterNotFoundException(fingerprintID);

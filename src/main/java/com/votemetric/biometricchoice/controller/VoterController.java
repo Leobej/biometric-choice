@@ -3,11 +3,11 @@ package com.votemetric.biometricchoice.controller;
 import com.votemetric.biometricchoice.dto.VoterDTO;
 import com.votemetric.biometricchoice.service.VoterService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/voters")
@@ -27,15 +27,43 @@ public class VoterController {
     }
 
     @GetMapping
-    public ResponseEntity<List<VoterDTO>> getAllVoters() {
-        List<VoterDTO> voterDTOList = voterService.getAllVoters();
-        return ResponseEntity.ok(voterDTOList);
+    public ResponseEntity<Page<VoterDTO>> getAllVoters(@RequestParam(required = false) String description, Pageable pageable) {
+
+
+        Page<VoterDTO> page;
+        if (description != null) {
+            page = voterService.getVoterByName(description, pageable);
+        } else {
+            page = voterService.getAllVoters(pageable);
+        }
+        return new ResponseEntity<>(page, HttpStatus.OK);
     }
 
+//        @GetMapping
+//    public ResponseEntity<Page<CandidateDTO>> getAllCandidates(
+//            @RequestParam(required = false) String description,
+//            Pageable pageable)  {
+//        Page<CandidateDTO> page;
+//        if (description != null) {
+//            page = candidateService.getCandidateByName(description, pageable);
+//        } else {
+//            page = candidateService.getAllCandidates(pageable);
+//        }
+//        return new ResponseEntity<>(page, HttpStatus.OK);
+//    }
+
     @PostMapping("/register")
-    public ResponseEntity<VoterDTO> createVoter(@RequestBody VoterDTO voterDTO) {
-        VoterDTO createdVoterDTO = voterService.saveVoter(voterDTO);
-        return new ResponseEntity<>(createdVoterDTO, HttpStatus.CREATED);
+    public ResponseEntity<VoterDTO> createVoter(
+            @RequestParam("firstname") String firstname,
+            @RequestParam("lastname") String lastname,
+            @RequestParam("cnp") String cnp,
+            @RequestParam("password") String password,
+            @RequestParam("fingerprintId") String fingerprintId,
+            @RequestParam("createdAt") String createdAt
+    ) {
+        VoterDTO createdVoterDTO = new VoterDTO(0L, firstname, lastname, cnp, password, Long.parseLong(fingerprintId), createdAt);
+        VoterDTO newVoter = voterService.saveVoter(createdVoterDTO);
+        return new ResponseEntity<>(newVoter, HttpStatus.CREATED);
     }
 
     @PutMapping
