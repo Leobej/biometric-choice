@@ -21,8 +21,6 @@ public class VoterService implements IVoterService {
     @Autowired
     private Mapper mapper;
 
-
-
     @Override
     public Page<VoterDTO> getAllVoters(Pageable pageable) {
         Page<Voter> candidates = voterRepository.findAll(pageable);
