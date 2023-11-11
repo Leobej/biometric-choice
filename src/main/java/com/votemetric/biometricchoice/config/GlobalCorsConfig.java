@@ -18,7 +18,7 @@ public class GlobalCorsConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOriginPatterns(List.of("http://localhost:3000")); // You can specify the React app's origin here, e.g., "http://localhost:3000"
+        config.setAllowedOriginPatterns(List.of("http://localhost:3000"));
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);
