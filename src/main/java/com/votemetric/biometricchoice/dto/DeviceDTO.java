@@ -1,6 +1,8 @@
 package com.votemetric.biometricchoice.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
@@ -8,7 +10,8 @@ import lombok.*;
 public class DeviceDTO {
 
     private Long id;
-
     private String type;
+    private String status;
+    private String name;
 
 }

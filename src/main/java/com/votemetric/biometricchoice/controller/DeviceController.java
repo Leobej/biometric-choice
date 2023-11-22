@@ -4,6 +4,8 @@ import com.votemetric.biometricchoice.dto.DeviceDTO;
 import com.votemetric.biometricchoice.exception.DeviceNotFoundException;
 import com.votemetric.biometricchoice.interfaces.IDeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,10 +19,16 @@ public class DeviceController {
     @Autowired
     private IDeviceService deviceService;
 
+//    @GetMapping
+//    public ResponseEntity<List<DeviceDTO>> getAllDevices() {
+//        List<DeviceDTO> devices = deviceService.getAllDevices();
+//        return new ResponseEntity<>(devices, HttpStatus.OK);
+//    }
+
     @GetMapping
-    public ResponseEntity<List<DeviceDTO>> getAllDevices() {
-        List<DeviceDTO> devices = deviceService.getAllDevices();
-        return new ResponseEntity<>(devices, HttpStatus.OK);
+    public ResponseEntity<Page<DeviceDTO>> getAllDevices(Pageable pageable) {
+        Page<DeviceDTO> devices = deviceService.getAllDevices(pageable);
+        return ResponseEntity.ok(devices);
     }
 
     @GetMapping("/{id}")

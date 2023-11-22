@@ -21,4 +21,10 @@ public class Device {
     @Column(nullable = false)
     private String type;
 
+    @Column(nullable = false)
+    private String status;
+
+    @Column
+    private String name;
+
 }

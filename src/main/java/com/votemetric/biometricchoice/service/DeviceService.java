@@ -7,6 +7,8 @@ import com.votemetric.biometricchoice.interfaces.IDeviceService;
 import com.votemetric.biometricchoice.mapper.Mapper;
 import com.votemetric.biometricchoice.repository.DeviceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,12 +26,23 @@ public class DeviceService implements IDeviceService {
         this.mapper = mapper;
     }
 
+//    @Override
+//    public List<DeviceDTO> getAllDevices() {
+//        List<Device> devices = deviceRepository.findAll();
+//        return devices.stream()
+//                .map((device) -> mapper.convertToType(device, DeviceDTO.class))
+//                .collect(Collectors.toList());
+//    }
+
     @Override
     public List<DeviceDTO> getAllDevices() {
-        List<Device> devices = deviceRepository.findAll();
-        return devices.stream()
-                .map((device) -> mapper.convertToType(device, DeviceDTO.class))
-                .collect(Collectors.toList());
+        return null;
+    }
+
+    @Override
+    public Page<DeviceDTO> getAllDevices(Pageable pageable) {
+        Page<Device> devices = deviceRepository.findAll(pageable);
+        return devices.map(device -> mapper.convertToType(device, DeviceDTO.class));
     }
 
     @Override
