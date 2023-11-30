@@ -15,7 +15,7 @@ public class Mapper {
     }
 
     public <T> T convertToType(Object source, Class<T> resultClass) {
-        logger.debug("converted object from " + source.getClass().getSimpleName() + " to " + resultClass.getSimpleName());
+        logger.debug("Converted object from " + source.getClass().getSimpleName() + " to " + resultClass.getSimpleName());
         return modelMapper.map(source, resultClass);
     }
 

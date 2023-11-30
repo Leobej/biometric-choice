@@ -2,7 +2,7 @@ package com.votemetric.biometricchoice.security.filter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.votemetric.biometricchoice.dto.AdminDTO;
+import com.votemetric.biometricchoice.modules.admin.AdminDTO;
 import com.votemetric.biometricchoice.interfaces.IAdminService;
 import com.votemetric.biometricchoice.security.SecurityConstants;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

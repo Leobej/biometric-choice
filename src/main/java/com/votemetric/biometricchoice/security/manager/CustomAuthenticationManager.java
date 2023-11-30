@@ -1,7 +1,7 @@
 package com.votemetric.biometricchoice.security.manager;
 
-import com.votemetric.biometricchoice.dto.AdminDTO;
-import com.votemetric.biometricchoice.service.AdminService;
+import com.votemetric.biometricchoice.modules.admin.AdminDTO;
+import com.votemetric.biometricchoice.modules.admin.AdminService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;

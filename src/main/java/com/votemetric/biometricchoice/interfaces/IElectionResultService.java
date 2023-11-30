@@ -1,7 +1,7 @@
 package com.votemetric.biometricchoice.interfaces;
 
 
-import com.votemetric.biometricchoice.dto.ElectionResultDTO;
+import com.votemetric.biometricchoice.modules.electionresult.ElectionResultDTO;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package com.votemetric.biometricchoice.interfaces;
 
-import com.votemetric.biometricchoice.dto.FingerprintDTO;
+import com.votemetric.biometricchoice.modules.fingerprint.FingerprintDTO;
 
 import java.util.List;
 

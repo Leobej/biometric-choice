@@ -1,7 +1,7 @@
 package com.votemetric.biometricchoice.interfaces;
 
 
-import com.votemetric.biometricchoice.dto.AdminDTO;
+import com.votemetric.biometricchoice.modules.admin.AdminDTO;
 
 public interface IAdminService {
     AdminDTO getUser(Long id);

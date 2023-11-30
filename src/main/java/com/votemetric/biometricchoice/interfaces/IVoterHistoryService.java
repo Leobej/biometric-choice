@@ -1,6 +1,6 @@
 package com.votemetric.biometricchoice.interfaces;
 
-import com.votemetric.biometricchoice.dto.VoterHistoryDTO;
+import com.votemetric.biometricchoice.modules.voterhistory.VoterHistoryDTO;
 
 import java.util.List;
 

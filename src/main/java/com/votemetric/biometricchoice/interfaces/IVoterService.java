@@ -1,10 +1,8 @@
 package com.votemetric.biometricchoice.interfaces;
 
-import com.votemetric.biometricchoice.dto.VoterDTO;
+import com.votemetric.biometricchoice.modules.voter.VoterDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
 
 public interface IVoterService {
 

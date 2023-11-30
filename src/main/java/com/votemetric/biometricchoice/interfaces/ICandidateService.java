@@ -1,6 +1,6 @@
 package com.votemetric.biometricchoice.interfaces;
 
-import com.votemetric.biometricchoice.dto.CandidateDTO;
+import com.votemetric.biometricchoice.modules.candidate.CandidateDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

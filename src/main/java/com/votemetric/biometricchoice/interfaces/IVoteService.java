@@ -1,6 +1,6 @@
 package com.votemetric.biometricchoice.interfaces;
 
-import com.votemetric.biometricchoice.dto.VoteDTO;
+import com.votemetric.biometricchoice.modules.vote.VoteDTO;
 import com.votemetric.biometricchoice.exception.CandidateNotFoundException;
 import com.votemetric.biometricchoice.exception.VoterNotFoundException;
 

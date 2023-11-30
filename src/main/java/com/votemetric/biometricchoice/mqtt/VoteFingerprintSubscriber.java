@@ -1,8 +1,8 @@
 package com.votemetric.biometricchoice.mqtt;
 
-import com.votemetric.biometricchoice.entity.Fingerprint;
-import com.votemetric.biometricchoice.repository.FingerprintRepository;
-import com.votemetric.biometricchoice.repository.VoterRepository;
+import com.votemetric.biometricchoice.modules.fingerprint.Fingerprint;
+import com.votemetric.biometricchoice.modules.fingerprint.FingerprintRepository;
+import com.votemetric.biometricchoice.modules.voter.VoterRepository;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

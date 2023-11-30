@@ -1,6 +1,5 @@
 package com.votemetric.biometricchoice.utility;
 
-import com.votemetric.biometricchoice.dto.FingerprintDTO;
 import com.votemetric.biometricchoice.interfaces.IFingerprintService;
 import org.springframework.stereotype.Component;
 
