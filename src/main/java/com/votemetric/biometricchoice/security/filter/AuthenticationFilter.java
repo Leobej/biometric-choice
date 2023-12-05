@@ -29,16 +29,17 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
         try {
-            AdminDTO user = new ObjectMapper().readValue(request.getInputStream(), AdminDTO.class);
-            Authentication authentication = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
+            GeneralAuthenticationRequest authRequest = new ObjectMapper().readValue(request.getInputStream(), GeneralAuthenticationRequest.class);
+            Authentication authentication = new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword());
             return authenticationManager.authenticate(authentication);
         } catch (IOException e) {
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+        logger.info("unsuccessfulAuthentication");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.getWriter().write(failed.getMessage());
         response.getWriter().flush();
@@ -53,7 +54,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
         response.addHeader(SecurityConstants.AUTHORIZATION, SecurityConstants.BEARER + token);
         response.addHeader("Access-Control-Expose-Headers", SecurityConstants.AUTHORIZATION);
-        System.out.println(response.getHeader(SecurityConstants.AUTHORIZATION ));
+        logger.info(response.getHeader(SecurityConstants.AUTHORIZATION));
     }
 
 

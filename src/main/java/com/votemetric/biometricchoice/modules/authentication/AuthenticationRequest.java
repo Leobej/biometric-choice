@@ -9,7 +9,7 @@ public class AuthenticationRequest {
     public AuthenticationRequest() {}
 
     public AuthenticationRequest(AdminDTO admin) {
-        this.username = admin.getUsername();
+        this.username = admin.getEmail();
         this.password = admin.getPassword();
     }
 

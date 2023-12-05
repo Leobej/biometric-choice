@@ -1,6 +1,7 @@
 package com.votemetric.biometricchoice.security;
 
 import com.votemetric.biometricchoice.interfaces.IAdminService;
+import com.votemetric.biometricchoice.mapper.Mapper;
 import com.votemetric.biometricchoice.security.filter.AuthenticationFilter;
 import com.votemetric.biometricchoice.security.filter.ExceptionHandlerFilter;
 import com.votemetric.biometricchoice.security.filter.JWTAuthorizationFilter;
@@ -19,6 +20,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final CustomAuthenticationManager customAuthenticationManager;
+    private final Mapper mapper;
 
     private final IAdminService adminService;
 
@@ -35,6 +37,8 @@ public class SecurityConfig {
                 .authorizeRequests().antMatchers().permitAll()
                 .antMatchers(HttpMethod.POST, SecurityConstants.REGISTER_PATH).permitAll()
                 .antMatchers("/authenticate").permitAll()
+                .antMatchers("/mobile-users/login").permitAll()
+                .antMatchers("/mobile-users/register").permitAll()
                 .antMatchers("/h2/**").permitAll()
                 .antMatchers("/v3/**").permitAll() //permit all methods starting with "/v3"
                 .antMatchers("/swagger-ui/**").permitAll() //permit all methods starting with "/v3"

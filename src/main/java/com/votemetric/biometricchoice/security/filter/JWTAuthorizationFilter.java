@@ -34,15 +34,15 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
         }
 
         String token = header.replace(SecurityConstants.BEARER, "");
-        String username = JWT.require(Algorithm.HMAC512(SecurityConstants.SECRET_KEY))
+        String email = JWT.require(Algorithm.HMAC512(SecurityConstants.SECRET_KEY))
                 .build()
                 .verify(token)
                 .getSubject();
 
-        AdminDTO admin = adminService.loadUserByUsername(username);
+        AdminDTO admin = adminService.loadUserByEmail(email);
 
         if (isAuthorized(admin.getRole(), request)) {
-            Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, List.of());
+            Authentication authentication = new UsernamePasswordAuthenticationToken(email, null, List.of());
             SecurityContextHolder.getContext().setAuthentication(authentication);
             filterChain.doFilter(request, response);
         } else {

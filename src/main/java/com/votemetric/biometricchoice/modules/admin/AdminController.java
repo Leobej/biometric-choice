@@ -17,18 +17,18 @@ public class AdminController {
 
     @GetMapping("/{id}")
     public ResponseEntity<String> findById(@PathVariable Long id) {
-        return new ResponseEntity<>(adminService.getUser(id).getUsername(), HttpStatus.OK);
+        return new ResponseEntity<>(adminService.getUser(id).getEmail(), HttpStatus.OK);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<HttpStatus> createUser(@Valid @RequestBody AdminDTO user) {
-        adminService.saveUser(user);
+    public ResponseEntity<HttpStatus> createUser(@Valid @RequestBody AdminDTO adminDTO) {
+        adminService.saveUser(adminDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/user-role/{username}")
-    public String getUserRole(@PathVariable String username) {
-        return adminService.getUserRole(username);
+    @GetMapping("/user-role/{email}")
+    public String getUserRole(@PathVariable String email) {
+        return adminService.getUserRole(email);
     }
 
 

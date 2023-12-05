@@ -10,6 +10,7 @@ import org.springframework.messaging.MessagingException;
 import org.springframework.stereotype.Service;
 
 import javax.websocket.MessageHandler;
+import java.util.Objects;
 
 @Service
 public class MqttSubscriber implements MessageHandler {
@@ -25,14 +26,12 @@ public class MqttSubscriber implements MessageHandler {
 
     public void getFingerprint(Message<?> message) throws MessagingException {
         String payload = message.getPayload().toString();
-        System.out.println(payload);
-        if (payload == "s-a reconectat") {
-            System.out.println("Reconnect");
+        logger.debug(payload);
+        if (Objects.equals(payload, "s-a reconectat")) {
+            logger.debug("Reconnect");
             return;
         }
-
         JSONObject jsonObject = new JSONObject(payload);
-
         String fingerprintChunk = jsonObject.getString("fingerprint");
         totalChunks = 4;
         fingerprint = fingerprint + fingerprintChunk;
@@ -42,10 +41,9 @@ public class MqttSubscriber implements MessageHandler {
             Fingerprint fingerprintEntity = new Fingerprint();
             fingerprintEntity.setFingerprint(fingerprint);
             fingerprintEntity.setDeviceId(jsonObject.getString("deviceId"));
-            System.out.println(fingerprintEntity);
+            logger.debug("DeviceId: " + fingerprintEntity.getDeviceId() + " : " + fingerprintEntity.getFingerprint());
             fingerprintRepository.save(fingerprintEntity);
-            System.out.println("Fingerprint saved: " + fingerprint);
-            logger.info("Fingerprint saved: {}", fingerprint);
+            logger.debug("Fingerprint saved: " + fingerprint);
             fingerprint = "";
             totalChunks = 0;
             receivedChunks = 0;

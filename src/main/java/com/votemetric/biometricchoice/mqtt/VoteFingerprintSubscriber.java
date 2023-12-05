@@ -43,7 +43,7 @@ public class VoteFingerprintSubscriber {
             Fingerprint fingerprintEntity = new Fingerprint();
             fingerprintEntity.setFingerprint(fingerprint);
             fingerprintEntity.setDeviceId(jsonObject.getString("deviceId"));
-            System.out.println(fingerprintEntity);
+//            logger.debug(fingerprintEntity);
 //            fingerprintRepository.save(fingerprintEntity);
             logger.info("Fingerprint for Vote saved: {}", fingerprint);
             fingerprint = "";

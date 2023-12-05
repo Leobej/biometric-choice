@@ -12,9 +12,9 @@ import javax.validation.constraints.NotBlank;
 @EqualsAndHashCode
 public class AdminDTO {
     private long id;
-    @NotBlank(message = "username cannot be blank")
+    @NotBlank(message = "email cannot be blank")
     @NonNull
-    private String username;
+    private String email;
     @NotBlank(message = "password cannot be blank")
     @NonNull
     private String password;

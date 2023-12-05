@@ -14,7 +14,7 @@ public interface CandidateRepository extends JpaRepository<Candidate, Long> {
     @Query("SELECT c FROM Candidate c WHERE LOWER(c.firstname) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(c.lastname) LIKE LOWER(CONCAT('%', :query, '%'))")
     List<Candidate> searchCandidates(@Param("query") String query);
 
-    @Query("SELECT new com.votemetric.biometricchoice.dto.CandidateNameDTO(c.candidateId, c.firstname, c.lastname) FROM Candidate c WHERE LOWER(c.firstname) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(c.lastname) LIKE LOWER(CONCAT('%', :query, '%'))")
+    @Query("SELECT new com.votemetric.biometricchoice.modules.candidate.CandidateNameDTO(c.candidateId, c.firstname, c.lastname) FROM Candidate c WHERE LOWER(c.firstname) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(c.lastname) LIKE LOWER(CONCAT('%', :query, '%'))")
     List<CandidateNameDTO> findCandidatesByFirstnameOrLastname(@Param("query") String query);
 
 

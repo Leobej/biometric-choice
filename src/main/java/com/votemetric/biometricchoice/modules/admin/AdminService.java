@@ -1,11 +1,8 @@
 package com.votemetric.biometricchoice.modules.admin;
 
-import com.votemetric.biometricchoice.modules.admin.AdminDTO;
-import com.votemetric.biometricchoice.modules.admin.Admin;
 import com.votemetric.biometricchoice.exception.ApiException;
 import com.votemetric.biometricchoice.interfaces.IAdminService;
 import com.votemetric.biometricchoice.mapper.Mapper;
-import com.votemetric.biometricchoice.modules.admin.AdminRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -33,8 +30,8 @@ public class AdminService implements IAdminService {
     }
 
     @Override
-    public AdminDTO getUser(String username) {
-        Admin user = adminRepository.findByUsername(username).orElseThrow(() -> new ApiException("User with this name doesn't exist", HttpStatus.NOT_FOUND));
+    public AdminDTO getUser(String email) {
+        Admin user = adminRepository.findByEmail(email).orElseThrow(() -> new ApiException("User with this name doesn't exist", HttpStatus.NOT_FOUND));
         return mapper.convertToType(user, AdminDTO.class);
     }
 
@@ -46,14 +43,14 @@ public class AdminService implements IAdminService {
         return mapper.convertToType(user, AdminDTO.class);
     }
 
-    public AdminDTO loadUserByUsername(String username) throws UsernameNotFoundException {
-        Admin admin = adminRepository.findByUsername(username)
+    public AdminDTO loadUserByEmail(String email) throws UsernameNotFoundException {
+        Admin admin = adminRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Invalid username or password"));
 
         return mapper.convertToType(admin, AdminDTO.class);
     }
-    public String getUserRole(String username) {
-        Admin admin = adminRepository.findByUsername(username)
+    public String getUserRole(String email) {
+        Admin admin = adminRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Invalid username or password"));
 
         return admin.getRole();
