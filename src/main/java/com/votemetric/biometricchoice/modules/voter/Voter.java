@@ -34,9 +34,6 @@ public class Voter {
     @Column(nullable = false, unique = true)
     private String cnp;
 
-    @Column(nullable = false, unique = true, length = 1024)
-    private String fingerPrint;
-
     @Column(nullable = false)
     private String createdAt;
 
@@ -46,7 +43,4 @@ public class Voter {
 
     @OneToMany(mappedBy = "voter")
     private List<VoterHistory> voterHistories;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "voter")
-    private List<Fingerprint> fingerprints;
 }

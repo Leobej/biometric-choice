@@ -19,4 +19,8 @@ public class Mapper {
         return modelMapper.map(source, resultClass);
     }
 
+    public ModelMapper getModelMapper() {
+        return modelMapper;
+    }
+
 }

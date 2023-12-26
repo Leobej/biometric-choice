@@ -1,12 +1,9 @@
 package com.votemetric.biometricchoice.modules.electionresult;
 
 
-import com.votemetric.biometricchoice.modules.electionresult.ElectionResultDTO;
-import com.votemetric.biometricchoice.modules.electionresult.ElectionResult;
 import com.votemetric.biometricchoice.exception.ElectionResultNotFoundException;
 import com.votemetric.biometricchoice.interfaces.IElectionResultService;
 import com.votemetric.biometricchoice.mapper.Mapper;
-import com.votemetric.biometricchoice.modules.electionresult.ElectionResultRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -48,7 +45,7 @@ public class ElectionResultService implements IElectionResultService {
 
     @Override
     public ElectionResultDTO updateElectionResult(ElectionResultDTO electionResultDTO) {
-        checkIfElectionResultExists(electionResultDTO.getElectionId());
+        checkIfElectionResultExists(electionResultDTO.getAssociatedElectionId());
         ElectionResult electionResult = mapper.convertToType(electionResultDTO, ElectionResult.class);
         ElectionResult savedElectionResult = electionResultRepository.save(electionResult);
         return mapper.convertToType(savedElectionResult, ElectionResultDTO.class);

@@ -11,8 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ElectionResultDTO {
     private Long electionResultsId;
-    private Long electionId;
+    private Long associatedElectionId;
     private Long candidateId;
     private Long votes;
-    private Double percentage;
 }

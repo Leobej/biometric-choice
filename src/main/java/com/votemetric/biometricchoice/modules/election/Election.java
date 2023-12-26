@@ -42,6 +42,12 @@ public class Election {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @Column(nullable = false)
+    private LocalDateTime startDate;
+
+    @Column(nullable = false)
+    private LocalDateTime endDate;
+
     // Relationships
     @OneToMany(mappedBy = "election")
     private List<ElectionResult> electionResults;

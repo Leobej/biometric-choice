@@ -1,6 +1,8 @@
 package com.votemetric.biometricchoice.interfaces;
 
 import com.votemetric.biometricchoice.modules.election.ElectionDTO;
+import com.votemetric.biometricchoice.modules.election.ElectionDetailDTO;
+import com.votemetric.biometricchoice.modules.votingtrend.DailyVotingTrendDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -21,4 +23,9 @@ public interface IElectionService {
     ElectionDTO updateElection(ElectionDTO electionDTO);
 
     void deleteElectionById(Long electionId);
+
+    ElectionDetailDTO getElectionDetailsById(Long id);
+
+    List<DailyVotingTrendDTO> getVotingTrends(Long electionId);
+    List<DailyVotingTrendDTO>getVotingTrendsForCandidate(Long electionId, Long candidateId);
 }

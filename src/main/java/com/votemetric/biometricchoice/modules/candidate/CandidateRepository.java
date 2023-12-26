@@ -1,7 +1,5 @@
 package com.votemetric.biometricchoice.modules.candidate;
 
-import com.votemetric.biometricchoice.modules.candidate.CandidateNameDTO;
-import com.votemetric.biometricchoice.modules.candidate.Candidate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,8 +15,9 @@ public interface CandidateRepository extends JpaRepository<Candidate, Long> {
     @Query("SELECT new com.votemetric.biometricchoice.modules.candidate.CandidateNameDTO(c.candidateId, c.firstname, c.lastname) FROM Candidate c WHERE LOWER(c.firstname) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(c.lastname) LIKE LOWER(CONCAT('%', :query, '%'))")
     List<CandidateNameDTO> findCandidatesByFirstnameOrLastname(@Param("query") String query);
 
-
     Page<Candidate> findByFirstnameContaining(String firstName, Pageable pageable);
+
+    List<Candidate> findByElections_ElectionId(Long electionId);
 
     Page<Candidate> getCandidatesByFirstname(String description, Pageable pageable);
 }

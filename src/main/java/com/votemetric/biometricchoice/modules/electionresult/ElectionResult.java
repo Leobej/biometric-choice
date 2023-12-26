@@ -31,7 +31,5 @@ public class ElectionResult {
     @Column(nullable = false)
     private Long votes;
 
-    @Column(nullable = false)
-    private Double percentage;
 }
 
