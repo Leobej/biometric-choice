@@ -46,6 +46,12 @@ public class ElectionController {
         return ResponseEntity.ok(trends);
     }
 
+    @GetMapping("/{id}/aggregated-votes")
+    public ResponseEntity<List<CandidateVoteCountDTO>> getAggregatedVotes(@PathVariable("id") Long electionId) {
+        List<CandidateVoteCountDTO> aggregatedVotes = electionService.getAggregatedVotesByElectionId(electionId);
+        return ResponseEntity.ok(aggregatedVotes);
+    }
+
     @GetMapping("")
     public ResponseEntity<Page<ElectionDTO>> getAllElections(
             @RequestParam(required = false) String description,

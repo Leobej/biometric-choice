@@ -1,11 +1,8 @@
 package com.votemetric.biometricchoice.modules.voter;
 
-import com.votemetric.biometricchoice.modules.voter.VoterDTO;
-import com.votemetric.biometricchoice.modules.voter.Voter;
 import com.votemetric.biometricchoice.exception.VoterNotFoundException;
 import com.votemetric.biometricchoice.interfaces.IVoterService;
 import com.votemetric.biometricchoice.mapper.Mapper;
-import com.votemetric.biometricchoice.modules.voter.VoterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,11 +23,18 @@ public class VoterService implements IVoterService {
 
     }
 
-    @Override
-    public Page<VoterDTO> getVoterByName(String description, Pageable pageable) {
-        Page<Voter> candidates = voterRepository.getVotersByFirstname(description, pageable);
-        return candidates.map(voter -> mapper.convertToType(voter, VoterDTO.class));
-    }
+//    @Override
+//    public Page<VoterDTO> getVotersByName(String query, Pageable pageable) {
+//        Page<Voter> voters;
+//        if (query != null && !query.trim().isEmpty()) {
+//            // Search by both first name and last name using the single 'query' parameter
+//            voters = voterRepository.findByFirstnameContainingOrLastnameContaining(query, query, pageable);
+//        } else {
+//            // Return all voters if no search criteria are provided
+//            return getAllVoters(pageable);
+//        }
+//        return voters.map(voter -> mapper.convertToType(voter, VoterDTO.class));
+//    }
 
     @Override
     public VoterDTO getVoterById(Long voterId) {
@@ -41,6 +45,7 @@ public class VoterService implements IVoterService {
     @Override
     public VoterDTO saveVoter(VoterDTO voterDTO) {
         Voter voter = mapper.convertToType(voterDTO, Voter.class);
+        voter.setCreatedAt(String.valueOf(new java.sql.Timestamp(System.currentTimeMillis())));
         Voter savedVoter = voterRepository.save(voter);
         return mapper.convertToType(savedVoter, VoterDTO.class);
     }
@@ -57,6 +62,12 @@ public class VoterService implements IVoterService {
     public void deleteVoterById(Long voterId) {
         checkIfVoterExists(voterId);
         voterRepository.deleteById(voterId);
+    }
+
+    @Override
+    public Page<VoterDTO> getVotersByName(String search, Pageable pageable) {
+        Page<Voter> voters = voterRepository.findByFirstnameContainingOrLastnameContaining(search, search, pageable);
+        return voters.map(voter -> mapper.convertToType(voter, VoterDTO.class));
     }
 
     Voter findVoterById(Long voterId) {

@@ -13,6 +13,8 @@ public interface IDeviceService {
 
     public Page<DeviceDTO> getAllDevices(Pageable pageable);
 
+    Page<DeviceDTO> getAllDevices(String search, Pageable pageable);
+
     DeviceDTO getDeviceById(Long id) throws DeviceNotFoundException;
 
 

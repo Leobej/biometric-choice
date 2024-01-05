@@ -43,13 +43,13 @@ public class ElectionResultService implements IElectionResultService {
         return mapper.convertToType(savedElectionResult, ElectionResultDTO.class);
     }
 
-    @Override
-    public ElectionResultDTO updateElectionResult(ElectionResultDTO electionResultDTO) {
-        checkIfElectionResultExists(electionResultDTO.getAssociatedElectionId());
-        ElectionResult electionResult = mapper.convertToType(electionResultDTO, ElectionResult.class);
-        ElectionResult savedElectionResult = electionResultRepository.save(electionResult);
-        return mapper.convertToType(savedElectionResult, ElectionResultDTO.class);
-    }
+//    @Override
+//    public ElectionResultDTO updateElectionResult(ElectionResultDTO electionResultDTO) {
+//        checkIfElectionResultExists(electionResultDTO.getAssociatedElectionId());
+//        ElectionResult electionResult = mapper.convertToType(electionResultDTO, ElectionResult.class);
+//        ElectionResult savedElectionResult = electionResultRepository.save(electionResult);
+//        return mapper.convertToType(savedElectionResult, ElectionResultDTO.class);
+//    }
 
     @Override
     public void deleteElectionResultById(Long electionResultId) {

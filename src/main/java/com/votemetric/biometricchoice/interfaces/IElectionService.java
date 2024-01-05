@@ -1,5 +1,6 @@
 package com.votemetric.biometricchoice.interfaces;
 
+import com.votemetric.biometricchoice.modules.election.CandidateVoteCountDTO;
 import com.votemetric.biometricchoice.modules.election.ElectionDTO;
 import com.votemetric.biometricchoice.modules.election.ElectionDetailDTO;
 import com.votemetric.biometricchoice.modules.votingtrend.DailyVotingTrendDTO;
@@ -28,4 +29,6 @@ public interface IElectionService {
 
     List<DailyVotingTrendDTO> getVotingTrends(Long electionId);
     List<DailyVotingTrendDTO>getVotingTrendsForCandidate(Long electionId, Long candidateId);
+
+    List<CandidateVoteCountDTO> getAggregatedVotesByElectionId(Long electionId);
 }

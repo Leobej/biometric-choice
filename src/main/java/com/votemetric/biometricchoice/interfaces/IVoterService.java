@@ -8,7 +8,7 @@ public interface IVoterService {
 
     Page<VoterDTO> getAllVoters(Pageable pageable);
 
-    Page<VoterDTO> getVoterByName(String description, Pageable pageable);
+    Page<VoterDTO> getVotersByName(String query, Pageable pageable);
 
     VoterDTO getVoterById(Long voterId);
 
@@ -17,4 +17,6 @@ public interface IVoterService {
     VoterDTO updateVoter(VoterDTO voterHistoryDTO);
 
     void deleteVoterById(Long voterId);
+
+//    Page<VoterDTO> getVotersByName(String firstname, String lastname, Pageable pageable);
 }

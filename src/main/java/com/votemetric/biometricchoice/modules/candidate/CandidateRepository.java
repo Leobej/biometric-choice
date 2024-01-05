@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+
 import java.util.List;
 
 public interface CandidateRepository extends JpaRepository<Candidate, Long> {
@@ -20,4 +21,8 @@ public interface CandidateRepository extends JpaRepository<Candidate, Long> {
     List<Candidate> findByElections_ElectionId(Long electionId);
 
     Page<Candidate> getCandidatesByFirstname(String description, Pageable pageable);
+
+    Page<Candidate> findByFirstnameContainingOrLastnameContaining(String firstname, String lastname, Pageable pageable);
+
+
 }

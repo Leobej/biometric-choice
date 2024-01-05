@@ -25,17 +25,19 @@ public class VoterController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<VoterDTO>> getAllVoters(@RequestParam(required = false) String description, Pageable pageable) {
-
+    public ResponseEntity<Page<VoterDTO>> getAllVoters(
+            @RequestParam(required = false) String search,
+            Pageable pageable) {
 
         Page<VoterDTO> page;
-        if (description != null) {
-            page = voterService.getVoterByName(description, pageable);
+        if (search != null && !search.trim().isEmpty()) {
+            page = voterService.getVotersByName(search, pageable);
         } else {
             page = voterService.getAllVoters(pageable);
         }
         return new ResponseEntity<>(page, HttpStatus.OK);
     }
+
 
 //        @GetMapping
 //    public ResponseEntity<Page<CandidateDTO>> getAllCandidates(
@@ -51,16 +53,8 @@ public class VoterController {
 //    }
 
     @PostMapping("/register")
-    public ResponseEntity<VoterDTO> createVoter(
-            @RequestParam("firstname") String firstname,
-            @RequestParam("lastname") String lastname,
-            @RequestParam("cnp") String cnp,
-            @RequestParam("password") String password,
-            @RequestParam("fingerprintId") String fingerprintId,
-            @RequestParam("createdAt") String createdAt
-    ) {
-        VoterDTO createdVoterDTO = new VoterDTO(0L, firstname, lastname, cnp, password, Long.parseLong(fingerprintId), createdAt);
-        VoterDTO newVoter = voterService.saveVoter(createdVoterDTO);
+    public ResponseEntity<VoterDTO> createVoter(@RequestBody VoterDTO voterDTO) {
+        VoterDTO newVoter = voterService.saveVoter(voterDTO);
         return new ResponseEntity<>(newVoter, HttpStatus.CREATED);
     }
 

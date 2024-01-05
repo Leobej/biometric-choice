@@ -12,13 +12,13 @@ public interface ICandidateService {
 
     Page<CandidateDTO> getAllCandidates(Pageable pageable);
 
-    Page<CandidateDTO> getCandidateByName(String description, Pageable pageable);
+//    Page<CandidateDTO> getCandidateByName(String description, Pageable pageable);
 
     CandidateDTO getCandidateById(Long id);
 
     CandidateDTO addCandidate(CandidateDTO candidateDTO);
 
-    CandidateDTO updateCandidate(CandidateDTO candidateDTO);
+    CandidateDTO updateCandidate(Long id, CandidateDTO candidateDTO);
 
     void deleteCandidate(Long id);
 

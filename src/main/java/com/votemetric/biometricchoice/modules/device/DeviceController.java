@@ -15,15 +15,11 @@ public class DeviceController {
     @Autowired
     private IDeviceService deviceService;
 
-//    @GetMapping
-//    public ResponseEntity<List<DeviceDTO>> getAllDevices() {
-//        List<DeviceDTO> devices = deviceService.getAllDevices();
-//        return new ResponseEntity<>(devices, HttpStatus.OK);
-//    }
-
     @GetMapping
-    public ResponseEntity<Page<DeviceDTO>> getAllDevices(Pageable pageable) {
-        Page<DeviceDTO> devices = deviceService.getAllDevices(pageable);
+    public ResponseEntity<Page<DeviceDTO>> getAllDevices(
+            @RequestParam(required = false) String search,
+            Pageable pageable) {
+        Page<DeviceDTO> devices = deviceService.getAllDevices(search, pageable);
         return ResponseEntity.ok(devices);
     }
 
@@ -34,12 +30,12 @@ public class DeviceController {
     }
 
     @PostMapping
-    public ResponseEntity<DeviceDTO> addDevice(@RequestBody DeviceDTO deviceDTO) {
+    public ResponseEntity<DeviceDTO> updateDevice(@PathVariable Long id, @RequestBody DeviceDTO deviceDTO) {
         DeviceDTO device = deviceService.addDevice(deviceDTO);
         return new ResponseEntity<>(device, HttpStatus.CREATED);
     }
 
-    @PutMapping()
+    @PutMapping("/{id}")
     public ResponseEntity<DeviceDTO> updateDevice(@RequestBody DeviceDTO deviceDTO) {
         DeviceDTO device = deviceService.updateDevice(deviceDTO);
         return new ResponseEntity<>(device, HttpStatus.OK);

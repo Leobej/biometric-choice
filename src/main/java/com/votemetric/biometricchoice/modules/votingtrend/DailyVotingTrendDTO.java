@@ -15,6 +15,12 @@ import java.time.LocalDateTime;
 public class DailyVotingTrendDTO {
     private LocalDateTime date;
     private Long totalVotes;
+    private Long candidateIdResult;
+
+    public DailyVotingTrendDTO(LocalDateTime date, Long totalVotes) {
+        this.date = date;
+        this.totalVotes = totalVotes;
+    }
 
 
     // Constructor, getters, and setters

@@ -35,11 +35,11 @@ public class ElectionResultController {
         return new ResponseEntity<>(createdElectionResultDTO, HttpStatus.CREATED);
     }
 
-    @PutMapping
-    public ResponseEntity<ElectionResultDTO> updateElectionResult(@RequestBody ElectionResultDTO electionResultDTO) {
-        ElectionResultDTO updatedElectionResultDTO = electionResultService.updateElectionResult(electionResultDTO);
-        return ResponseEntity.ok(updatedElectionResultDTO);
-    }
+//    @PutMapping
+//    public ResponseEntity<ElectionResultDTO> updateElectionResult(@RequestBody ElectionResultDTO electionResultDTO) {
+//        ElectionResultDTO updatedElectionResultDTO = electionResultService.updateElectionResult(electionResultDTO);
+//        return ResponseEntity.ok(updatedElectionResultDTO);
+//    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteElectionResultById(@PathVariable("id") Long id) {

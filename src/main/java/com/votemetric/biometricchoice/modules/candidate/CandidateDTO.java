@@ -17,4 +17,10 @@ public class CandidateDTO {
     private String position;
     private byte[] image;
 
+    public CandidateDTO(String firstname, String lastname, String party, String position) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.party = party;
+        this.position = position;
+    }
 }

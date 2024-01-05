@@ -27,16 +27,17 @@ public class LocationController {
     // Retrieve all locations with pagination
     @GetMapping("")
     public ResponseEntity<Page<LocationDTO>> getAllLocations(
-            @RequestParam(required = false) String description,
+            @RequestParam(required = false) String searchTerm,
             Pageable pageable) {
         Page<LocationDTO> page;
-        if (description != null && !description.trim().isEmpty()) {
-            page = locationService.getLocationsBySearchTerm(description, pageable);
+        if (searchTerm != null && !searchTerm.trim().isEmpty()) {
+            page = locationService.getLocationsBySearchTerm(searchTerm, pageable);
         } else {
             page = locationService.getAllLocations(pageable);
         }
         return new ResponseEntity<>(page, HttpStatus.OK);
     }
+
 
     // Create a new location
     @PostMapping

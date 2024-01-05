@@ -5,6 +5,7 @@ import com.votemetric.biometricchoice.modules.fingerprint.FingerprintRepository;
 import com.votemetric.biometricchoice.modules.vote.VoteRepository;
 import com.votemetric.biometricchoice.modules.voter.VoterRepository;
 import com.votemetric.biometricchoice.utility.FingerprintSimilaritiesVerifier;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,7 +66,7 @@ public class VoteFingerprintSubscriber {
         if (receivedChunks == totalChunks) {
             boolean isVerified = verifyFingerprint(voterId, fingerprint);
             String verificationResult = isVerified ? "verified" : "not verified";
-            mqttPublisher.publish("fingerprintVerificationResult", verificationResult);
+            mqttPublisher.publish("voteFingerprintTopic", verificationResult);
             resetFingerprintData();
         }
     }
@@ -81,16 +82,23 @@ public class VoteFingerprintSubscriber {
     }
 
     private boolean verifyFingerprint(Long voterId, String receivedFingerprint) {
-        Optional<Fingerprint> registeredFingerprintEntity = Optional.of(new Fingerprint());
-
-//                = fingerprintRepository.findByVoterId(voterId);
+        Optional<Fingerprint> registeredFingerprintEntity = fingerprintRepository.findByVoter_VoterId(voterId);
         if (!registeredFingerprintEntity.isPresent()) {
             throw new RuntimeException("Registered fingerprint not found for Voter ID: " + voterId);
         }
-
+        logger.info("Received Fingerprint: " + receivedFingerprint);
         String registeredFingerprint = registeredFingerprintEntity.get().getFingerprint();
-        double similarity = FingerprintSimilaritiesVerifier.jaroWinkler(registeredFingerprint, receivedFingerprint);
-        return similarity >= 0.95; // Threshold for verification
+//        double similarity = FingerprintSimilaritiesVerifier.jaroWinkler(registeredFingerprint, receivedFingerprint);
+        double similarity = StringUtils.getJaroWinklerDistance(registeredFingerprint, receivedFingerprint);;
+        logger.info("Similarity:" + similarity);
+        return similarity >= 0.90;
+
+//        String registeredBinaryFingerprint = FingerprintSimilaritiesVerifier.hexToBinary(registeredFingerprint);
+//        String receivedBinaryFingerprint = FingerprintSimilaritiesVerifier.hexToBinary(receivedFingerprint);
+//        double similarity = FingerprintSimilaritiesVerifier.binarySimilarity(registeredBinaryFingerprint, receivedBinaryFingerprint);
+//        logger.info("Binary similarity: " + similarity);
+//        return similarity >= 0.90;
+
     }
 
     private void resetFingerprintData() {

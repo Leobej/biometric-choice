@@ -37,6 +37,9 @@ public class Voter {
     @Column(nullable = false)
     private String createdAt;
 
+    @Column(nullable = false, name = "fingerprint_id")
+    private Long fingerprintId;
+
     // Relationships
     @OneToMany(mappedBy = "voter")
     private List<Election> elections;

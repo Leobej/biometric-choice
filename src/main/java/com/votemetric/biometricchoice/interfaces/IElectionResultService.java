@@ -13,7 +13,7 @@ public interface IElectionResultService {
 
     ElectionResultDTO createElectionResult(ElectionResultDTO electionResultDTO);
 
-    ElectionResultDTO updateElectionResult(ElectionResultDTO electionResultDTO);
+//    ElectionResultDTO updateElectionResult(ElectionResultDTO electionResultDTO);
 
     void deleteElectionResultById(Long electionResultId);
 }

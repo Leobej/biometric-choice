@@ -1,8 +1,10 @@
 package com.votemetric.biometricchoice.utility;
 
+import java.util.Objects;
+
 public class FingerprintSimilaritiesVerifier {
-     public static double jaroDistance(String s1, String s2) {
-        if (s1 == s2)
+    public static double jaroDistance(String s1, String s2) {
+        if (Objects.equals(s1, s2))
             return 1.0;
 
         int len1 = s1.length(),
@@ -76,4 +78,25 @@ public class FingerprintSimilaritiesVerifier {
         }
         return jaroDistance;
     }
+
+    public static String hexToBinary(String hex) {
+        StringBuilder binary = new StringBuilder();
+        for (int i = 0; i < hex.length(); i++) {
+            int digit = Integer.parseInt(hex.substring(i, i + 1), 16);
+            binary.append(String.format("%4s", Integer.toBinaryString(digit)).replace(' ', '0'));
+        }
+        return binary.toString();
+    }
+
+    // Calculate Binary Similarity
+    public static double binarySimilarity(String binary1, String binary2) {
+        int matchingBits = 0;
+        for (int i = 0; i < binary1.length() && i < binary2.length(); i++) {
+            if (binary1.charAt(i) == binary2.charAt(i)) {
+                matchingBits++;
+            }
+        }
+        return (double) matchingBits / Math.min(binary1.length(), binary2.length());
+    }
+
 }

@@ -1,12 +1,8 @@
 package com.votemetric.biometricchoice.modules.candidate;
 
-import com.votemetric.biometricchoice.modules.candidate.CandidateDTO;
-import com.votemetric.biometricchoice.modules.candidate.CandidateNameDTO;
-import com.votemetric.biometricchoice.modules.candidate.Candidate;
 import com.votemetric.biometricchoice.exception.CandidateNotFoundException;
 import com.votemetric.biometricchoice.interfaces.ICandidateService;
 import com.votemetric.biometricchoice.mapper.Mapper;
-import com.votemetric.biometricchoice.modules.candidate.CandidateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,9 +30,8 @@ public class CandidateService implements ICandidateService {
 
     }
 
-    @Override
-    public Page<CandidateDTO> getCandidateByName(String description, Pageable pageable) {
-        Page<Candidate> candidates = candidateRepository.getCandidatesByFirstname(description, pageable);
+    public Page<CandidateDTO> getCandidatesByName(String firstname, String lastname, Pageable pageable) {
+        Page<Candidate> candidates = candidateRepository.findByFirstnameContainingOrLastnameContaining(firstname, lastname, pageable);
         return candidates.map(candidate -> mapper.convertToType(candidate, CandidateDTO.class));
     }
 
@@ -54,12 +49,17 @@ public class CandidateService implements ICandidateService {
     }
 
     @Override
-    public CandidateDTO updateCandidate(CandidateDTO candidateDTO) {
-        checkIfCandidateExist(candidateDTO.getCandidateId());
-        Candidate candidateSave = mapper.convertToType(candidateDTO, Candidate.class);
-        candidateRepository.save(candidateSave);
-        return candidateDTO;
+    public CandidateDTO updateCandidate(Long id, CandidateDTO candidateDTO) {
+        Candidate existingCandidate = findCandidateById(id);
+        Candidate updatedCandidate = mapper.convertToType(candidateDTO, Candidate.class);
+        updatedCandidate.setCandidateId(existingCandidate.getCandidateId());
+        if (candidateDTO.getImage() != null) {
+            updatedCandidate.setImage(candidateDTO.getImage());
+        }
+        Candidate savedCandidate = candidateRepository.save(updatedCandidate);
+        return mapper.convertToType(savedCandidate, CandidateDTO.class);
     }
+
 
     @Override
     public void deleteCandidate(Long id) {

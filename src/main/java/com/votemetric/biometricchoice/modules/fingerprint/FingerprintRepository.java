@@ -11,5 +11,8 @@ public interface FingerprintRepository extends JpaRepository<Fingerprint, Long> 
     @Query("SELECT f FROM Fingerprint f WHERE f.id = (SELECT MAX(f2.id) FROM Fingerprint f2 WHERE f2.deviceId = :deviceId)")
     Fingerprint findLatestByDeviceId(@Param("deviceId") String deviceId);
 
-//    Optional<Fingerprint> findByVoterId(@Param("voter_id")Long voterId);
+//    Optional<Fingerprint> findByVoterId(Long voterId);
+
+    Optional<Fingerprint> findByVoter_VoterId(@Param("voter_id") Long voterId);
+
 }

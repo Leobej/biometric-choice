@@ -1,11 +1,8 @@
 package com.votemetric.biometricchoice.modules.device;
 
-import com.votemetric.biometricchoice.modules.device.DeviceDTO;
-import com.votemetric.biometricchoice.modules.device.Device;
 import com.votemetric.biometricchoice.exception.DeviceNotFoundException;
 import com.votemetric.biometricchoice.interfaces.IDeviceService;
 import com.votemetric.biometricchoice.mapper.Mapper;
-import com.votemetric.biometricchoice.modules.device.DeviceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,6 +38,16 @@ public class DeviceService implements IDeviceService {
     @Override
     public Page<DeviceDTO> getAllDevices(Pageable pageable) {
         Page<Device> devices = deviceRepository.findAll(pageable);
+        return devices.map(device -> mapper.convertToType(device, DeviceDTO.class));
+    }
+    @Override
+    public Page<DeviceDTO> getAllDevices(String search, Pageable pageable) {
+        Page<Device> devices;
+        if (search != null && !search.trim().isEmpty()) {
+            devices = deviceRepository.findByNameContainingOrTypeContainingOrStatusContaining(search, search, search, pageable);
+        } else {
+            devices = deviceRepository.findAll(pageable);
+        }
         return devices.map(device -> mapper.convertToType(device, DeviceDTO.class));
     }
 

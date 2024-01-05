@@ -94,7 +94,25 @@ public class ElectionService implements IElectionService {
     @Override
     public Page<ElectionDTO> getElectionsByDescription(String description, Pageable pageable) {
         Page<Election> elections = electionRepository.findByDescriptionContaining(description, pageable);
-        return elections.map(election -> mapper.convertToType(election, ElectionDTO.class));
+        return elections.map(this::convertElectionToElectionDTO);
+    }
+
+    private ElectionDTO convertElectionToElectionDTO(Election election) {
+        ElectionDTO dto = new ElectionDTO();
+        dto.setElectionId(election.getElectionId());
+        if (election.getVoter() != null) {
+            dto.setVoterId(election.getVoter().getVoterId());
+        }
+        if (election.getCandidate() != null) {
+            dto.setCandidateId(election.getCandidate().getCandidateId());
+        }
+        dto.setDescription(election.getDescription());
+        dto.setLocation(election.getLocation());
+        dto.setCreatedAt(election.getCreatedAt());
+        dto.setStartDate(election.getStartDate());
+        dto.setEndDate(election.getEndDate());
+        dto.setActive(election.getActive());
+        return dto;
     }
 
 
@@ -145,16 +163,27 @@ public class ElectionService implements IElectionService {
     }
 
     private List<CandidateDTO> fetchCandidatesForElection(Long electionId) {
-        List<Candidate> candidates = candidateRepository.findByElections_ElectionId(electionId);
+        List<Candidate> candidates = voterHistoryRepository.findCandidatesByElectionId(electionId);
         return candidates.stream()
                 .map(candidate -> mapper.convertToType(candidate, CandidateDTO.class))
                 .collect(Collectors.toList());
     }
 
+
     private List<ElectionResultDTO> fetchElectionResultsForElection(Long electionId) {
-        List<ElectionResult> results = electionResultRepository.findByElection_ElectionId(electionId);
-        return results.stream()
-                .map(result -> mapper.convertToType(result, ElectionResultDTO.class))
+        List<Object[]> voteCounts = voterHistoryRepository.countVotesByCandidate(electionId);
+        return voteCounts.stream()
+                .map(result -> {
+                    Candidate candidate = candidateRepository.findById((Long) result[0])
+                            .orElseThrow(() -> new ElectionResultNotFoundException((Long) result[0]));
+                    return new ElectionResultDTO(
+                            candidate.getCandidateId(),
+                            candidate.getFirstname(),
+                            candidate.getLastname(),
+                            candidate.getParty(),
+                            ((Long) result[1]) // Assuming vote count fits into an integer
+                    );
+                })
                 .collect(Collectors.toList());
     }
 
@@ -174,11 +203,20 @@ public class ElectionService implements IElectionService {
         List<DailyVotingTrendDTO> trends = new ArrayList<>();
         for (Object[] result : results) {
             LocalDateTime date = ((Timestamp) result[0]).toLocalDateTime();
-            Long totalVotes = (Long) result[1];
-            trends.add(new DailyVotingTrendDTO(date, totalVotes));
+            Long candidateIdResult = (Long) result[1]; // Extract the candidateId from the result
+            Long totalVotes = (Long) result[2]; // Adjust the index for totalVotes
+            trends.add(new DailyVotingTrendDTO(date, totalVotes, candidateIdResult)); // Pass the candidateId to the DTO
         }
         return trends;
     }
 
+
+    @Override
+    public List<CandidateVoteCountDTO> getAggregatedVotesByElectionId(Long electionId) {
+        List<Object[]> voteCounts = voterHistoryRepository.countVotesByCandidate(electionId);
+        return voteCounts.stream()
+                .map(result -> new CandidateVoteCountDTO((Long) result[0], (Long) result[1]))
+                .collect(Collectors.toList());
+    }
 
 }

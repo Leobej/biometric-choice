@@ -72,7 +72,7 @@ public class LocationService implements ILocationService {
 
     @Override
     public Page<LocationDTO> getLocationsBySearchTerm(String searchTerm, Pageable pageable) {
-        Page<Location> locations = locationRepository.findByCityContaining(searchTerm, pageable);
+        Page<Location> locations = locationRepository.findBySearchTerm(searchTerm, pageable);
         return locations.map(location -> mapper.convertToType(location, LocationDTO.class));
     }
 }
