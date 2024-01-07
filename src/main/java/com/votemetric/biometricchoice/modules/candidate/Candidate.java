@@ -44,7 +44,7 @@ public class Candidate {
     private byte[] image;
 
     // Relationships
-    @OneToMany(mappedBy = "candidate")
+    @ManyToMany(mappedBy = "candidates")
     private List<Election> elections;
 
     @OneToMany(mappedBy = "candidate")

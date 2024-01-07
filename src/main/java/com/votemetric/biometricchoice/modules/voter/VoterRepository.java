@@ -12,7 +12,7 @@ public interface VoterRepository extends JpaRepository<Voter, Long> {
     //    boolean existsByFingerprintId(Long fingerprintId);
     Page<Voter> getVotersByFirstname(String description, Pageable pageable);
 
-    List<Voter> findByElections_ElectionId(Long electionId);
+//    List<Voter> findByElections_ElectionId(Long electionId);
 
     Optional<Voter> findByCnp(String cnp);
 

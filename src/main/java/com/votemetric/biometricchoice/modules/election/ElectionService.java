@@ -1,5 +1,6 @@
 package com.votemetric.biometricchoice.modules.election;
 
+import com.votemetric.biometricchoice.exception.CandidateNotFoundException;
 import com.votemetric.biometricchoice.exception.ElectionNotFoundException;
 import com.votemetric.biometricchoice.exception.ElectionResultNotFoundException;
 import com.votemetric.biometricchoice.interfaces.IElectionService;
@@ -100,12 +101,12 @@ public class ElectionService implements IElectionService {
     private ElectionDTO convertElectionToElectionDTO(Election election) {
         ElectionDTO dto = new ElectionDTO();
         dto.setElectionId(election.getElectionId());
-        if (election.getVoter() != null) {
-            dto.setVoterId(election.getVoter().getVoterId());
-        }
-        if (election.getCandidate() != null) {
-            dto.setCandidateId(election.getCandidate().getCandidateId());
-        }
+//        if (election.getVoter() != null) {
+//            dto.setVoterId(election.getVoter().getVoterId());
+//        }
+//        if (election.getCandidate() != null) {
+//            dto.setCandidateId(election.getCandidate().getCandidateId());
+//        }
         dto.setDescription(election.getDescription());
         dto.setLocation(election.getLocation());
         dto.setCreatedAt(election.getCreatedAt());
@@ -125,15 +126,42 @@ public class ElectionService implements IElectionService {
     public ElectionDTO createElection(ElectionDTO electionDto) {
         Election election = mapper.convertToType(electionDto, Election.class);
         election.setCreatedAt(LocalDateTime.now());
-        election = electionRepository.save(election);
-        return mapper.convertToType(election, ElectionDTO.class);
+        List<Candidate> candidateEntities = new ArrayList<>();
+        if (electionDto.getCandidates() != null) {
+            candidateEntities = electionDto.getCandidates().stream()
+                    .map(candidateDto -> candidateRepository.findById(candidateDto.getCandidateId())
+                            .orElseThrow(() -> new CandidateNotFoundException(candidateDto.getCandidateId())))
+                    .collect(Collectors.toList());
+        }
+        election.setCandidates(candidateEntities);
+
+        Election savedElection = electionRepository.save(election);
+        return convertElectionToElectionDTO(savedElection);
     }
 
     @Override
     public ElectionDTO updateElection(ElectionDTO electionDto) {
         checkIfElectionExists(electionDto.getElectionId());
-        electionRepository.save(mapper.convertToType(electionDto, Election.class));
-        return electionDto;
+        Election existingElection = electionRepository.findById(electionDto.getElectionId())
+                .orElseThrow(() -> new ElectionNotFoundException(electionDto.getElectionId()));
+
+        // Manually set fields to update
+        existingElection.setDescription(electionDto.getDescription());
+        existingElection.setLocation(electionDto.getLocation());
+        existingElection.setStartDate(electionDto.getStartDate());
+        existingElection.setEndDate(electionDto.getEndDate());
+        existingElection.setActive(electionDto.getActive());
+        // Set other fields that you need to update
+
+        List<Candidate> candidateEntities = electionDto.getCandidates().stream()
+                .map(candidateDto -> candidateRepository.findById(candidateDto.getCandidateId())
+                        .orElseThrow(() -> new CandidateNotFoundException(candidateDto.getCandidateId())))
+                .collect(Collectors.toList());
+
+        existingElection.setCandidates(candidateEntities);
+
+        Election savedElection = electionRepository.save(existingElection);
+        return convertElectionToElectionDTO(savedElection);
     }
 
     @Override
@@ -156,7 +184,7 @@ public class ElectionService implements IElectionService {
 
 
     private List<VoterDTO> fetchVotersForElection(Long electionId) {
-        List<Voter> voters = voterRepository.findByElections_ElectionId(electionId);
+        List<Voter> voters = voterHistoryRepository.findVotersByElectionId(electionId);
         return voters.stream()
                 .map(voter -> mapper.convertToType(voter, VoterDTO.class))
                 .collect(Collectors.toList());

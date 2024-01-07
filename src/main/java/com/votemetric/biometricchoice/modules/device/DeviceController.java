@@ -30,7 +30,7 @@ public class DeviceController {
     }
 
     @PostMapping
-    public ResponseEntity<DeviceDTO> updateDevice(@PathVariable Long id, @RequestBody DeviceDTO deviceDTO) {
+    public ResponseEntity<DeviceDTO> addDevice(@RequestBody DeviceDTO deviceDTO) {
         DeviceDTO device = deviceService.addDevice(deviceDTO);
         return new ResponseEntity<>(device, HttpStatus.CREATED);
     }

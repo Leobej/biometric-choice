@@ -57,7 +57,7 @@ public class ElectionController {
             @RequestParam(required = false) String description,
             Pageable pageable) {
         Page<ElectionDTO> page;
-        if (description != null) {
+        if (description != null && description.trim().length() > 0) {
             page = electionService.getElectionsByDescription(description, pageable);
         } else {
             page = electionService.getAllElections(pageable);

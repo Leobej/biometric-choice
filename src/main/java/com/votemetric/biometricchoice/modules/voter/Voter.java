@@ -28,9 +28,6 @@ public class Voter {
     @Column(nullable = false)
     private String lastname;
 
-    @Column(nullable = false)
-    private String password;
-
     @Column(nullable = false, unique = true)
     private String cnp;
 
@@ -41,8 +38,8 @@ public class Voter {
     private Long fingerprintId;
 
     // Relationships
-    @OneToMany(mappedBy = "voter")
-    private List<Election> elections;
+//    @OneToMany(mappedBy = "voter")
+//    private List<Election> elections;
 
     @OneToMany(mappedBy = "voter")
     private List<VoterHistory> voterHistories;

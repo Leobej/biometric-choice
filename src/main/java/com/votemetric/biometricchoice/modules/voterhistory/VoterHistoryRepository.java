@@ -1,6 +1,7 @@
 package com.votemetric.biometricchoice.modules.voterhistory;
 
 import com.votemetric.biometricchoice.modules.candidate.Candidate;
+import com.votemetric.biometricchoice.modules.voter.Voter;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -29,5 +30,6 @@ public interface VoterHistoryRepository extends JpaRepository<VoterHistory, Long
     @Query("SELECT DISTINCT vh.candidate FROM VoterHistory vh WHERE vh.election.electionId = :electionId")
     List<Candidate> findCandidatesByElectionId(@Param("electionId") Long electionId);
 
-
+@Query("SELECT DISTINCT vh.voter FROM VoterHistory vh WHERE vh.election.electionId = :electionId")
+    List<Voter> findVotersByElectionId(Long electionId);
 }

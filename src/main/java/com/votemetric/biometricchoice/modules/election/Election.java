@@ -23,13 +23,9 @@ public class Election {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long electionId;
 
-    @ManyToOne
-    @JoinColumn(name = "voter_id")
-    private Voter voter;
-
-    @ManyToOne
-    @JoinColumn(name = "candidate_id")
-    private Candidate candidate;
+//    @ManyToOne
+//    @JoinColumn(name = "voter_id")
+//    private Voter voter;
 
     @Column(nullable = false)
     private String description;
@@ -51,4 +47,12 @@ public class Election {
     // Relationships
     @OneToMany(mappedBy = "election")
     private List<ElectionResult> electionResults;
+
+    @ManyToMany
+    @JoinTable(
+            name = "election_candidates",
+            joinColumns = @JoinColumn(name = "election_id"),
+            inverseJoinColumns = @JoinColumn(name = "candidate_id")
+    )
+    private List<Candidate> candidates;
 }
