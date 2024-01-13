@@ -7,6 +7,7 @@ import com.votemetric.biometricchoice.modules.votingtrend.DailyVotingTrendDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface IElectionService {
@@ -28,7 +29,11 @@ public interface IElectionService {
     ElectionDetailDTO getElectionDetailsById(Long id);
 
     List<DailyVotingTrendDTO> getVotingTrends(Long electionId);
-    List<DailyVotingTrendDTO>getVotingTrendsForCandidate(Long electionId, Long candidateId);
+
+    List<DailyVotingTrendDTO> getVotingTrendsForCandidate(Long electionId, Long candidateId);
 
     List<CandidateVoteCountDTO> getAggregatedVotesByElectionId(Long electionId);
+
+    //    Page<ElectionDTO> getElectionsByDateRange(Pageable pageable, LocalDateTime now, Object o, boolean b);
+    public Page<ElectionDTO> getElectionsByDateRange(Pageable pageable, LocalDateTime from, LocalDateTime to, boolean isUpcoming);
 }

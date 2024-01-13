@@ -18,7 +18,7 @@ import java.util.List;
 public class ElectionDetailDTO {
     private Long electionId;
     private String description;
-    private String location;
+    private Long locationId;
     private LocalDateTime createdAt;
     private LocalDateTime startDate;
     private LocalDateTime endDate;

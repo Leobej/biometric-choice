@@ -1,11 +1,13 @@
 package com.votemetric.biometricchoice.mqtt;
 
+import com.machinezoo.sourceafis.FingerprintCompatibility;
+import com.machinezoo.sourceafis.FingerprintMatcher;
+import com.machinezoo.sourceafis.FingerprintTemplate;
 import com.votemetric.biometricchoice.modules.fingerprint.Fingerprint;
 import com.votemetric.biometricchoice.modules.fingerprint.FingerprintRepository;
 import com.votemetric.biometricchoice.modules.vote.VoteRepository;
 import com.votemetric.biometricchoice.modules.voter.VoterRepository;
 import com.votemetric.biometricchoice.utility.FingerprintSimilaritiesVerifier;
-import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +15,7 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.MessagingException;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
 import java.util.Optional;
 
 @Service
@@ -48,7 +51,7 @@ public class VoteFingerprintSubscriber {
 
         JSONObject jsonObject = new JSONObject(payload);
 
-        if (jsonObject.has("fingerprint")) {
+        if (jsonObject.has("fingerprintChunk")) {
             handleFingerprintMessage(jsonObject);
         } else if (jsonObject.has("selectedItem")) {
             handleVoteMessage(jsonObject);
@@ -56,18 +59,20 @@ public class VoteFingerprintSubscriber {
     }
 
     private void handleFingerprintMessage(JSONObject jsonObject) {
-        String fingerprintChunk = jsonObject.getString("fingerprint");
+        String fingerprintChunk = jsonObject.getString("fingerprintChunk");
         Long voterId = jsonObject.getLong("voterId");
         this.deviceId = jsonObject.getString("deviceId");
-        totalChunks = 4;
+        totalChunks = 6;
         fingerprint += fingerprintChunk;
         receivedChunks++;
 
-        if (receivedChunks == totalChunks) {
+        if (receivedChunks >= totalChunks) {
+            receivedChunks = 0;
             boolean isVerified = verifyFingerprint(voterId, fingerprint);
             String verificationResult = isVerified ? "verified" : "not verified";
             mqttPublisher.publish("voteFingerprintTopic", verificationResult);
             resetFingerprintData();
+
         }
     }
 
@@ -87,19 +92,31 @@ public class VoteFingerprintSubscriber {
             throw new RuntimeException("Registered fingerprint not found for Voter ID: " + voterId);
         }
         logger.info("Received Fingerprint: " + receivedFingerprint);
-        String registeredFingerprint = registeredFingerprintEntity.get().getFingerprint();
-//        double similarity = FingerprintSimilaritiesVerifier.jaroWinkler(registeredFingerprint, receivedFingerprint);
-        double similarity = StringUtils.getJaroWinklerDistance(registeredFingerprint, receivedFingerprint);;
-        logger.info("Similarity:" + similarity);
-        return similarity >= 0.90;
+        byte[] decodedReceivedFingerprint = FingerprintSimilaritiesVerifier.decodeBase64(receivedFingerprint);
 
-//        String registeredBinaryFingerprint = FingerprintSimilaritiesVerifier.hexToBinary(registeredFingerprint);
-//        String receivedBinaryFingerprint = FingerprintSimilaritiesVerifier.hexToBinary(receivedFingerprint);
-//        double similarity = FingerprintSimilaritiesVerifier.binarySimilarity(registeredBinaryFingerprint, receivedBinaryFingerprint);
-//        logger.info("Binary similarity: " + similarity);
-//        return similarity >= 0.90;
+        StringBuilder decodedFingerprintString = new StringBuilder();
+        StringBuilder registeredFingerprintBytesString = new StringBuilder();
+        String registeredFingerprintBase64 = registeredFingerprintEntity.get().getFingerprint();
+        byte[] registeredFingerprintBytes = Base64.getDecoder().decode(registeredFingerprintBase64);
+
+        for (int i = 0; i < decodedReceivedFingerprint.length; i++) {
+//            unsignedFingerprint[i] = (byte) (decodedReceivedFingerprint[i] & 0xFF);
+            decodedFingerprintString.append(decodedReceivedFingerprint[i]);
+            registeredFingerprintBytesString.append(registeredFingerprintBytes[i]);
+        }
+
+        FingerprintTemplate probeTemplate = FingerprintCompatibility.importTemplate(registeredFingerprintBytes);
+        FingerprintMatcher matcher = new FingerprintMatcher(probeTemplate);
+        double score = matcher.match(new FingerprintTemplate(decodedReceivedFingerprint));
+
+        logger.info("Decoded Received Fingerprint: " + decodedFingerprintString);
+        logger.info("Unsigned Fingerprint: " + registeredFingerprintBytesString);
+
+        logger.info("Matching score: " + score);
+        return score >= 0.90;
 
     }
+
 
     private void resetFingerprintData() {
         fingerprint = "";

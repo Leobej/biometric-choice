@@ -16,9 +16,9 @@ public class ElectionDeviceController {
     private IElectionDeviceService electionDeviceService;
 
     @PostMapping("/add")
-    public ResponseEntity<ElectionDeviceDTO> addDeviceToElection(@RequestParam long electionId, @RequestParam long deviceId) {
+    public ResponseEntity<ElectionDeviceDTO> addDeviceToElection(@RequestBody ElectionDeviceDTO electionDeviceDTO) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(electionDeviceService.addDeviceToElection(electionId, deviceId));
+                .body(electionDeviceService.addDeviceToElection(electionDeviceDTO.getElectionId(), electionDeviceDTO.getDeviceId()));
     }
 
     @DeleteMapping("/remove/{id}")

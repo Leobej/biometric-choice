@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -75,6 +76,7 @@ public class ElectionController {
 
     @PostMapping
     public ResponseEntity<ElectionDTO> createElection(@RequestBody ElectionDTO electionDto) {
+        System.out.println("Received electionDto: " + electionDto); // Add this log
         ElectionDTO savedElectionDto = electionService.createElection(electionDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedElectionDto);
     }
@@ -89,6 +91,18 @@ public class ElectionController {
     public ResponseEntity<Void> deleteElection(@PathVariable("id") Long id) {
         electionService.deleteElectionById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/history")
+    public ResponseEntity<Page<ElectionDTO>> getPastElections(Pageable pageable) {
+        Page<ElectionDTO> page = electionService.getElectionsByDateRange(pageable, null, LocalDateTime.now(), false);
+        return new ResponseEntity<>(page, HttpStatus.OK);
+    }
+
+    @GetMapping("/upcoming")
+    public ResponseEntity<Page<ElectionDTO>> getUpcomingElections(Pageable pageable) {
+        Page<ElectionDTO> page = electionService.getElectionsByDateRange(pageable, LocalDateTime.now(), null, true);
+        return new ResponseEntity<>(page, HttpStatus.OK);
     }
 }
 

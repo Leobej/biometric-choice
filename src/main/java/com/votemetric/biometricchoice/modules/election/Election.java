@@ -2,7 +2,7 @@ package com.votemetric.biometricchoice.modules.election;
 
 import com.votemetric.biometricchoice.modules.candidate.Candidate;
 import com.votemetric.biometricchoice.modules.electionresult.ElectionResult;
-import com.votemetric.biometricchoice.modules.voter.Voter;
+import com.votemetric.biometricchoice.modules.location.Location;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,15 +23,12 @@ public class Election {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long electionId;
 
-//    @ManyToOne
-//    @JoinColumn(name = "voter_id")
-//    private Voter voter;
-
     @Column(nullable = false)
     private String description;
 
-    @Column(nullable = false)
-    private String location;
+    @ManyToOne
+    @JoinColumn(name = "location_id")
+    private Location location;
 
     private Boolean active;
 

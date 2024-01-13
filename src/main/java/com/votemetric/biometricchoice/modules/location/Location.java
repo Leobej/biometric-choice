@@ -18,7 +18,7 @@ import java.util.List;
 public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long locationId;
+    private Long locationId;
 
     @Column(nullable = false)
     private String postalCode;

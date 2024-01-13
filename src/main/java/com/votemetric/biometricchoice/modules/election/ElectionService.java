@@ -3,14 +3,15 @@ package com.votemetric.biometricchoice.modules.election;
 import com.votemetric.biometricchoice.exception.CandidateNotFoundException;
 import com.votemetric.biometricchoice.exception.ElectionNotFoundException;
 import com.votemetric.biometricchoice.exception.ElectionResultNotFoundException;
+import com.votemetric.biometricchoice.exception.LocationNotFoundException;
 import com.votemetric.biometricchoice.interfaces.IElectionService;
 import com.votemetric.biometricchoice.mapper.Mapper;
 import com.votemetric.biometricchoice.modules.candidate.Candidate;
 import com.votemetric.biometricchoice.modules.candidate.CandidateDTO;
 import com.votemetric.biometricchoice.modules.candidate.CandidateRepository;
-import com.votemetric.biometricchoice.modules.electionresult.ElectionResult;
 import com.votemetric.biometricchoice.modules.electionresult.ElectionResultDTO;
-import com.votemetric.biometricchoice.modules.electionresult.ElectionResultRepository;
+import com.votemetric.biometricchoice.modules.location.Location;
+import com.votemetric.biometricchoice.modules.location.LocationRepository;
 import com.votemetric.biometricchoice.modules.voter.Voter;
 import com.votemetric.biometricchoice.modules.voter.VoterDTO;
 import com.votemetric.biometricchoice.modules.voter.VoterRepository;
@@ -33,19 +34,19 @@ public class ElectionService implements IElectionService {
     private final VoterRepository voterRepository;
     private final VoterHistoryRepository voterHistoryRepository;
     private final CandidateRepository candidateRepository;
-    private final ElectionResultRepository electionResultRepository;
+    private final LocationRepository locationRepository;
     private final Mapper mapper;
 
     public ElectionService(ElectionRepository electionRepository,
                            VoterRepository voterRepository,
                            VoterHistoryRepository voterHistoryRepository, CandidateRepository candidateRepository,
-                           ElectionResultRepository electionResultRepository,
-                           Mapper mapper) {
+                           LocationRepository locationRepository, Mapper mapper) {
         this.electionRepository = electionRepository;
         this.voterRepository = voterRepository;
         this.voterHistoryRepository = voterHistoryRepository;
         this.candidateRepository = candidateRepository;
-        this.electionResultRepository = electionResultRepository;
+        this.locationRepository = locationRepository;
+
         this.mapper = mapper;
     }
 
@@ -63,11 +64,14 @@ public class ElectionService implements IElectionService {
         // Setting basic fields from the Election entity to ElectionDetailDTO
         electionDetailDTO.setElectionId(election.getElectionId());
         electionDetailDTO.setDescription(election.getDescription());
-        electionDetailDTO.setLocation(election.getLocation());
+        electionDetailDTO.setLocationId(election.getLocation().getLocationId());
         electionDetailDTO.setCreatedAt(election.getCreatedAt());
         electionDetailDTO.setStartDate(election.getStartDate());
         electionDetailDTO.setEndDate(election.getEndDate());
         electionDetailDTO.setActive(election.getActive());
+        electionDetailDTO.setCandidates(election.getCandidates().stream() // Map the candidates to CandidateDTO
+                .map(candidate -> mapper.convertToType(candidate, CandidateDTO.class))
+                .collect(Collectors.toList()));
 
         // Populate the lists from fetched data
         // Note: The lists are populated with separate method calls
@@ -78,8 +82,8 @@ public class ElectionService implements IElectionService {
         List<VoterDTO> voters = fetchVotersForElection(electionId);
         electionDetailDTO.setVoters(voters);
 
-        List<CandidateDTO> candidates = fetchCandidatesForElection(electionId);
-        electionDetailDTO.setCandidates(candidates);
+//        List<CandidateDTO> candidates = fetchCandidatesForElection(electionId);
+//        electionDetailDTO.setCandidates(candidates);
 
         return electionDetailDTO;
     }
@@ -101,14 +105,8 @@ public class ElectionService implements IElectionService {
     private ElectionDTO convertElectionToElectionDTO(Election election) {
         ElectionDTO dto = new ElectionDTO();
         dto.setElectionId(election.getElectionId());
-//        if (election.getVoter() != null) {
-//            dto.setVoterId(election.getVoter().getVoterId());
-//        }
-//        if (election.getCandidate() != null) {
-//            dto.setCandidateId(election.getCandidate().getCandidateId());
-//        }
         dto.setDescription(election.getDescription());
-        dto.setLocation(election.getLocation());
+        dto.setLocationId(election.getLocation().getLocationId());
         dto.setCreatedAt(election.getCreatedAt());
         dto.setStartDate(election.getStartDate());
         dto.setEndDate(election.getEndDate());
@@ -126,6 +124,7 @@ public class ElectionService implements IElectionService {
     public ElectionDTO createElection(ElectionDTO electionDto) {
         Election election = mapper.convertToType(electionDto, Election.class);
         election.setCreatedAt(LocalDateTime.now());
+
         List<Candidate> candidateEntities = new ArrayList<>();
         if (electionDto.getCandidates() != null) {
             candidateEntities = electionDto.getCandidates().stream()
@@ -134,6 +133,11 @@ public class ElectionService implements IElectionService {
                     .collect(Collectors.toList());
         }
         election.setCandidates(candidateEntities);
+
+        Location location = locationRepository.findById(electionDto.getLocationId())
+                .orElseThrow(() -> new LocationNotFoundException(electionDto.getLocationId()));
+        System.out.println("Fetched location: " + location.getLocationId()); // Add this log
+        election.setLocation(location);
 
         Election savedElection = electionRepository.save(election);
         return convertElectionToElectionDTO(savedElection);
@@ -147,7 +151,7 @@ public class ElectionService implements IElectionService {
 
         // Manually set fields to update
         existingElection.setDescription(electionDto.getDescription());
-        existingElection.setLocation(electionDto.getLocation());
+        existingElection.setLocation(locationRepository.findById(electionDto.getLocationId()).orElseThrow(() -> new LocationNotFoundException(electionDto.getLocationId())));
         existingElection.setStartDate(electionDto.getStartDate());
         existingElection.setEndDate(electionDto.getEndDate());
         existingElection.setActive(electionDto.getActive());
@@ -245,6 +249,16 @@ public class ElectionService implements IElectionService {
         return voteCounts.stream()
                 .map(result -> new CandidateVoteCountDTO((Long) result[0], (Long) result[1]))
                 .collect(Collectors.toList());
+    }
+
+    public Page<ElectionDTO> getElectionsByDateRange(Pageable pageable, LocalDateTime from, LocalDateTime to, boolean isUpcoming) {
+        Page<Election> elections;
+        if (isUpcoming) {
+            elections = electionRepository.findByStartDateAfter(LocalDateTime.now(), pageable);
+        } else {
+            elections = electionRepository.findByEndDateBefore(LocalDateTime.now(), pageable);
+        }
+        return elections.map(election -> mapper.convertToType(election, ElectionDTO.class));
     }
 
 }

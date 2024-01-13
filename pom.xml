@@ -111,6 +111,11 @@
             <artifactId>similarity.jarowinkler</artifactId>
             <version>1.1.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.machinezoo.sourceafis</groupId>
+            <artifactId>sourceafis</artifactId>
+            <version>3.18.1</version>
+        </dependency>
 
     </dependencies>
     <build>

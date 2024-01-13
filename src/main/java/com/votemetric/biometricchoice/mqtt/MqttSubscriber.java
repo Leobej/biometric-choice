@@ -33,7 +33,7 @@ public class MqttSubscriber implements MessageHandler {
         }
         JSONObject jsonObject = new JSONObject(payload);
         String fingerprintChunk = jsonObject.getString("fingerprint");
-        totalChunks = 4;
+        totalChunks = 5;
         fingerprint = fingerprint + fingerprintChunk;
         receivedChunks++;
 

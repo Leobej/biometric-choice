@@ -19,7 +19,7 @@ public class ElectionDTO {
     private Long electionId;
 //    private Long voterId;
     private String description;
-    private String location;
+    private Long locationId;
     private LocalDateTime createdAt;
     private LocalDateTime startDate;
     private LocalDateTime endDate;

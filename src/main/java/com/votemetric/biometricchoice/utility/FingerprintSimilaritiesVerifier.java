@@ -1,5 +1,6 @@
 package com.votemetric.biometricchoice.utility;
 
+import java.util.Base64;
 import java.util.Objects;
 
 public class FingerprintSimilaritiesVerifier {
@@ -97,6 +98,15 @@ public class FingerprintSimilaritiesVerifier {
             }
         }
         return (double) matchingBits / Math.min(binary1.length(), binary2.length());
+    }
+
+    public static byte[] decodeBase64(String base64String) {
+        try {
+            return Base64.getDecoder().decode(base64String);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error decoding Base64 String: " + base64String);
+            throw e; // rethrow the exception to handle it as per your application's needs
+        }
     }
 
 }
