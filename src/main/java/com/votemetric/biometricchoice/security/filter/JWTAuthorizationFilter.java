@@ -65,6 +65,12 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
             if (requestMethod.equals("POST") && requestURI.startsWith("/voters/register")) {
                 return true;
             }
+            if (requestMethod.equals("GET") && requestURI.startsWith("/devices")) {
+                return true;
+            }
+            if (requestMethod.equals("GET") && requestURI.startsWith("/fingerprints/nextFingerprint")) {
+                return true;
+            }
         }
         if (requestURI.startsWith("/user/user-role/")) {
             return true;

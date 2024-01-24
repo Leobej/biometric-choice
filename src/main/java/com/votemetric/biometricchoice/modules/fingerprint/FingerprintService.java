@@ -24,8 +24,8 @@ public class FingerprintService implements IFingerprintService {
 
     @Override
     public FingerprintDTO getFingerprintById(Long fingerprintId) {
-        Fingerprint location = findFingerPrintById(fingerprintId);
-        return mapper.convertToType(location, FingerprintDTO.class);
+        Fingerprint fingerprint = findFingerPrintById(fingerprintId);
+        return mapper.convertToType(fingerprint, FingerprintDTO.class);
     }
 
     @Override

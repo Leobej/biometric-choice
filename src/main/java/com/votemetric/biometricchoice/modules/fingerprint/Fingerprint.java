@@ -23,7 +23,7 @@ public class Fingerprint {
     private String fingerprint;
 
     @Column(name = "device_id", nullable = false)
-    private String deviceId;
+    private Long deviceId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "voter_id")

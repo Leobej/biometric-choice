@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -15,5 +17,6 @@ public class VoterDTO {
     private String lastname;
     private String cnp;
     private Long fingerprintId;
-    private String createdAt;
+    private LocalDate createdAt;
+    private LocalDate birthdate;
 }

@@ -17,13 +17,16 @@ import javax.websocket.MessageHandler;
 public class MqttSubscriberConfig {
 
     @Autowired
-    private MqttSubscriber mqttSubscriber;
+    private RegisterSubscriber registerSubscriber;
 
     @Autowired
     private CNPSubscriber cnpSubscriber;
 
     @Autowired
     private VoteFingerprintSubscriber voteFingerprintSubscriber;
+
+    @Autowired
+    private SendVoteSubscriber sendVoteSubscriber;
 
 
     @Bean
@@ -38,6 +41,11 @@ public class MqttSubscriberConfig {
 
     @Bean
     public MessageChannel voteFingerprintChannel() {
+        return new DirectChannel();
+    }
+
+    @Bean
+    public MessageChannel sendVoteChannel() {
         return new DirectChannel();
     }
 
@@ -78,9 +86,20 @@ public class MqttSubscriberConfig {
     }
 
     @Bean
+    public MqttPahoMessageDrivenChannelAdapter sendVote() {
+        MqttPahoMessageDrivenChannelAdapter adapter =
+                new MqttPahoMessageDrivenChannelAdapter("tcp://localhost:1883", "testClient2", "send/vote");
+        adapter.setCompletionTimeout(5000);
+        adapter.setConverter(new DefaultPahoMessageConverter());
+        adapter.setQos(1);
+        adapter.setOutputChannel(sendVoteChannel());
+        return adapter;
+    }
+
+    @Bean
     @ServiceActivator(inputChannel = "fingerprintChannel")
     public MessageHandler handler() {
-        return mqttSubscriber;
+        return registerSubscriber;
     }
 
     // New CNP topic handler
@@ -94,6 +113,12 @@ public class MqttSubscriberConfig {
     @ServiceActivator(inputChannel = "voteFingerprintChannel")
     public VoteFingerprintSubscriber voterFingerprintHandler() {
         return voteFingerprintSubscriber; // replace getCNP with the method of CNPSubscriber
+    }
+
+    @Bean
+    @ServiceActivator(inputChannel = "sendVoteChannel")
+    public SendVoteSubscriber sendVoteHandler() {
+        return sendVoteSubscriber; // replace getCNP with the method of CNPSubscriber
     }
 
 

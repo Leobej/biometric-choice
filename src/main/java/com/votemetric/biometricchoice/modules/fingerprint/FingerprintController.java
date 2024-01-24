@@ -54,6 +54,7 @@ public class FingerprintController {
 
     @GetMapping("/nextFingerprint")
     public void sendNextFingerprint() {
-        mqttPublisher.publish("inTopic", "nextFingerprint");
+        mqttPublisher.publish("voteFingerprintTopic", "reg");
+        mqttPublisher.publish("voteFingerprintTopic", "nextFingerprint");
     }
 }

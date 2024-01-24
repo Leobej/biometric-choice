@@ -1,5 +1,6 @@
 package com.votemetric.biometricchoice.modules.voter;
 
+import com.votemetric.biometricchoice.modules.fingerprint.Fingerprint;
 import com.votemetric.biometricchoice.modules.voter.Voter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,4 +20,5 @@ public interface VoterRepository extends JpaRepository<Voter, Long> {
     Page<Voter> findByFirstnameContainingOrLastnameContaining(String firstname, String lastname, Pageable pageable);
 
 
+    Optional<Voter> findByFingerprintId(Long receivedFingerprint);
 }

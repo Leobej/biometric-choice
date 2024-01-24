@@ -1,6 +1,7 @@
 package com.votemetric.biometricchoice.modules.election;
 
 import com.votemetric.biometricchoice.modules.candidate.Candidate;
+import com.votemetric.biometricchoice.modules.electiondevices.ElectionDevice;
 import com.votemetric.biometricchoice.modules.electionresult.ElectionResult;
 import com.votemetric.biometricchoice.modules.location.Location;
 import lombok.AllArgsConstructor;
@@ -52,4 +53,8 @@ public class Election {
             inverseJoinColumns = @JoinColumn(name = "candidate_id")
     )
     private List<Candidate> candidates;
+
+    @OneToMany(mappedBy = "election")
+    private List<ElectionDevice> electionDevices; // Add this line
+
 }

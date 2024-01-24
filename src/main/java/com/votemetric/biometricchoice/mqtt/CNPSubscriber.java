@@ -33,12 +33,9 @@ public class CNPSubscriber {
 
         if (voterRepository.findByCnp(sentCnp).isPresent()) {
             logger.info("CNP exists: {}", sentCnp);
-            //this is the topic that the fingerprint device will subscribe to and that payload is the one that will activate
-            // the read fingerprint feature on the fingerprint device
             mqttPublisher.publish("voteFingerprintTopic", "nextFingerprint");
         } else {
             logger.info("CNP does not exist: {}", sentCnp);
-            // Handle the case where CNP does not exist
         }
     }
 }

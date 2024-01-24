@@ -1,14 +1,13 @@
 package com.votemetric.biometricchoice.modules.voter;
 
-import com.votemetric.biometricchoice.modules.election.Election;
 import com.votemetric.biometricchoice.modules.voterhistory.VoterHistory;
-import com.votemetric.biometricchoice.modules.fingerprint.Fingerprint;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -31,8 +30,11 @@ public class Voter {
     @Column(nullable = false, unique = true)
     private String cnp;
 
-    @Column(nullable = false)
+    @Column
     private String createdAt;
+
+    @Column
+    private LocalDate birthdate;
 
     @Column(nullable = false, name = "fingerprint_id")
     private Long fingerprintId;

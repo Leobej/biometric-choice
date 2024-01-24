@@ -13,5 +13,5 @@ import lombok.Setter;
 public class FingerprintDTO {
     private Long id;
     private String fingerprint;
-    private String deviceId;
+    private Long deviceId;
 }

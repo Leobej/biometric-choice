@@ -24,5 +24,11 @@ public interface CandidateRepository extends JpaRepository<Candidate, Long> {
 
     Page<Candidate> findByFirstnameContainingOrLastnameContaining(String firstname, String lastname, Pageable pageable);
 
+    @Query("SELECT c FROM Candidate c " +
+            "JOIN c.elections e " +
+            "JOIN e.electionDevices ed " +
+            "JOIN ed.device d " +
+            "WHERE d.name = :deviceName AND e.active = true")
+    List<Candidate> findCandidatesByDeviceName(@Param("deviceName") String deviceName);
 
 }
