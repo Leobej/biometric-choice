@@ -26,5 +26,4 @@ public class Device {
 
     @Column
     private String name;
-
 }

@@ -8,8 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class DeviceService implements IDeviceService {
 
@@ -22,24 +20,6 @@ public class DeviceService implements IDeviceService {
         this.mapper = mapper;
     }
 
-//    @Override
-//    public List<DeviceDTO> getAllDevices() {
-//        List<Device> devices = deviceRepository.findAll();
-//        return devices.stream()
-//                .map((device) -> mapper.convertToType(device, DeviceDTO.class))
-//                .collect(Collectors.toList());
-//    }
-
-    @Override
-    public List<DeviceDTO> getAllDevices() {
-        return null;
-    }
-
-    @Override
-    public Page<DeviceDTO> getAllDevices(Pageable pageable) {
-        Page<Device> devices = deviceRepository.findAll(pageable);
-        return devices.map(device -> mapper.convertToType(device, DeviceDTO.class));
-    }
     @Override
     public Page<DeviceDTO> getAllDevices(String search, Pageable pageable) {
         Page<Device> devices;

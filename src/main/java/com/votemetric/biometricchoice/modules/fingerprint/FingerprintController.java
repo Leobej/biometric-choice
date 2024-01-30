@@ -47,7 +47,7 @@ public class FingerprintController {
     }
 
     @GetMapping("/getFingerprintId/{deviceId}")
-    public ResponseEntity<Long> getFingerprintId(@PathVariable ("deviceId")String deviceId) {
+    public ResponseEntity<Long> getFingerprintId(@PathVariable ("deviceId")Long deviceId) {
         Long id = fingerprintService.getFingerprintByDeviceId(deviceId);
         return ResponseEntity.ok(id);
     }

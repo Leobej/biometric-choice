@@ -1,6 +1,7 @@
 package com.votemetric.biometricchoice.security;
 
 import com.votemetric.biometricchoice.interfaces.IAdminService;
+import com.votemetric.biometricchoice.interfaces.IUserService;
 import com.votemetric.biometricchoice.mapper.Mapper;
 import com.votemetric.biometricchoice.security.filter.AuthenticationFilter;
 import com.votemetric.biometricchoice.security.filter.ExceptionHandlerFilter;
@@ -23,6 +24,7 @@ public class SecurityConfig {
     private final Mapper mapper;
 
     private final IAdminService adminService;
+    private final IUserService userService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -40,16 +42,14 @@ public class SecurityConfig {
                 .antMatchers("/mobile-users/login").permitAll()
                 .antMatchers("/mobile-users/register").permitAll()
                 .antMatchers("/h2/**").permitAll()
-                .antMatchers("/v3/**").permitAll() //permit all methods starting with "/v3"
-                .antMatchers("/swagger-ui/**").permitAll() //permit all methods starting with "/v3"
+                .antMatchers("/v3/**").permitAll()
+                .antMatchers("/swagger-ui/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new ExceptionHandlerFilter(), AuthenticationFilter.class)
                 .addFilter(authenticationFilter)
-                .addFilterBefore(new JWTAuthorizationFilter(adminService), AuthenticationFilter.class)
+                .addFilterBefore(new JWTAuthorizationFilter(adminService, userService), AuthenticationFilter.class)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         return http.build();
     }
-
-
 }

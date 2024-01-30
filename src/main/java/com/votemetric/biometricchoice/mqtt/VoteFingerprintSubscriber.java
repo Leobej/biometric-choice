@@ -3,7 +3,6 @@ package com.votemetric.biometricchoice.mqtt;
 import com.votemetric.biometricchoice.modules.candidate.Candidate;
 import com.votemetric.biometricchoice.modules.candidate.CandidateRepository;
 import com.votemetric.biometricchoice.modules.fingerprint.FingerprintRepository;
-import com.votemetric.biometricchoice.modules.vote.VoteRepository;
 import com.votemetric.biometricchoice.modules.voter.Voter;
 import com.votemetric.biometricchoice.modules.voter.VoterRepository;
 import com.votemetric.biometricchoice.mqtt.verificationresult.FingerprintVerificationResult;
@@ -25,17 +24,15 @@ public class VoteFingerprintSubscriber {
     private final Logger logger = LoggerFactory.getLogger(VoteFingerprintSubscriber.class);
     private final FingerprintRepository fingerprintRepository;
     private final VoterRepository voterRepository;
-    private final VoteRepository voteRepository;
     private final CandidateRepository candidateRepository;
     private final MqttPublisher mqttPublisher;
     private String deviceId;
 
     public VoteFingerprintSubscriber(FingerprintRepository fingerprintRepository,
                                      VoterRepository voterRepository,
-                                     VoteRepository voteRepository, CandidateRepository candidateRepository, MqttPublisher mqttPublisher) {
+                                     CandidateRepository candidateRepository, MqttPublisher mqttPublisher) {
         this.fingerprintRepository = fingerprintRepository;
         this.voterRepository = voterRepository;
-        this.voteRepository = voteRepository;
         this.candidateRepository = candidateRepository;
         this.mqttPublisher = mqttPublisher;
     }

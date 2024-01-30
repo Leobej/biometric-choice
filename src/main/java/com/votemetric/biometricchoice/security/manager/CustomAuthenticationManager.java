@@ -1,4 +1,5 @@
 package com.votemetric.biometricchoice.security.manager;
+
 import com.votemetric.biometricchoice.exception.ApiException;
 import com.votemetric.biometricchoice.modules.admin.AdminDTO;
 import com.votemetric.biometricchoice.modules.admin.AdminService;
@@ -15,7 +16,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
-import java.util.Optional;
 
 @Component
 @AllArgsConstructor
@@ -37,20 +37,17 @@ public class CustomAuthenticationManager implements AuthenticationManager {
                 return new UsernamePasswordAuthenticationToken(email, null, Collections.singletonList(new SimpleGrantedAuthority(adminUser.getRole())));
             }
         } catch (ApiException e) {
-            // If no admin user is found, try to authenticate as a mobile user
-        }
-
-        try {
-            // Try to authenticate as a mobile user
-            UserDTO mobileUser = userService.getUserByEmail(email);
-            if (bCryptPasswordEncoder.matches(password, mobileUser.getPassword())) {
-                return new UsernamePasswordAuthenticationToken(email, null);
+            try {
+                // Try to authenticate as a mobile user
+                UserDTO mobileUser = userService.getUserByEmail(email);
+                if (bCryptPasswordEncoder.matches(password, mobileUser.getPassword())) {
+                    return new UsernamePasswordAuthenticationToken(email, null);
+                }
+            } catch (ApiException e1) {
+                // If no mobile user is found, throw BadCredentialsException
+                throw new BadCredentialsException("Invalid email or password.");
             }
-        } catch (ApiException e) {
-            // If no mobile user is found, throw BadCredentialsException
-            throw new BadCredentialsException("Invalid email or password.");
         }
-
         throw new BadCredentialsException("Invalid email or password.");
     }
 

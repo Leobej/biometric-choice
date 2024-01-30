@@ -1,12 +1,9 @@
 package com.votemetric.biometricchoice.modules.voterhistory;
 
 
-import com.votemetric.biometricchoice.modules.voterhistory.VoterHistoryDTO;
-import com.votemetric.biometricchoice.modules.voterhistory.VoterHistory;
 import com.votemetric.biometricchoice.exception.VoterHistoryNotFoundException;
 import com.votemetric.biometricchoice.interfaces.IVoterHistoryService;
 import com.votemetric.biometricchoice.mapper.Mapper;
-import com.votemetric.biometricchoice.modules.voterhistory.VoterHistoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

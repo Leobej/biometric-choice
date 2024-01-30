@@ -13,14 +13,6 @@ import javax.validation.ConstraintViolationException;
 public class GeneralExceptionHandler {
     private static final Logger logger = LoggerFactory.getLogger(GeneralExceptionHandler.class);
 
-    @ExceptionHandler(value = {CandidateNotFoundException.class, ElectionNotFoundException.class, ElectionResultNotFoundException.class
-            , LocationNotFoundException.class, VoterHistoryNotFoundException.class, VoterNotFoundException.class
-    })
-    public static ResponseEntity<Object> handleExceptions(ApiException e) {
-        logger.debug("Exception handled:" + e.getMessage() + " with http status: " + e.getHttpStatus());
-        return new ResponseEntity<>(e.getMessage(), e.getHttpStatus());
-    }
-
     @ExceptionHandler(value = {ConstraintViolationException.class})
     public static ResponseEntity<Object> handleConstraintExceptions(ConstraintViolationException e) {
         logger.debug("Exception handled:" + e.getMessage() + " with http status: ");

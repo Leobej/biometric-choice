@@ -1,13 +1,10 @@
 package com.votemetric.biometricchoice.modules.fingerprint;
 
 
-import com.votemetric.biometricchoice.modules.fingerprint.FingerprintDTO;
-import com.votemetric.biometricchoice.modules.fingerprint.Fingerprint;
 import com.votemetric.biometricchoice.exception.ElectionNotFoundException;
 import com.votemetric.biometricchoice.exception.LocationNotFoundException;
 import com.votemetric.biometricchoice.interfaces.IFingerprintService;
 import com.votemetric.biometricchoice.mapper.Mapper;
-import com.votemetric.biometricchoice.modules.fingerprint.FingerprintRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -62,7 +59,7 @@ public class FingerprintService implements IFingerprintService {
     }
 
     @Override
-    public Long getFingerprintByDeviceId(String deviceId) {
+    public Long getFingerprintByDeviceId(Long deviceId) {
         return fingerprintRepository.findLatestByDeviceId(deviceId).getId();
     }
 

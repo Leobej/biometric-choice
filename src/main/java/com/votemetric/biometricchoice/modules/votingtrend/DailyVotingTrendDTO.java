@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -21,8 +20,5 @@ public class DailyVotingTrendDTO {
         this.date = date;
         this.totalVotes = totalVotes;
     }
-
-
-    // Constructor, getters, and setters
 }
 

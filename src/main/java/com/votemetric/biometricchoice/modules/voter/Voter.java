@@ -39,10 +39,6 @@ public class Voter {
     @Column(nullable = false, name = "fingerprint_id")
     private Long fingerprintId;
 
-    // Relationships
-//    @OneToMany(mappedBy = "voter")
-//    private List<Election> elections;
-
     @OneToMany(mappedBy = "voter")
     private List<VoterHistory> voterHistories;
 }

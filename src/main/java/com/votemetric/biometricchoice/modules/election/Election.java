@@ -2,7 +2,6 @@ package com.votemetric.biometricchoice.modules.election;
 
 import com.votemetric.biometricchoice.modules.candidate.Candidate;
 import com.votemetric.biometricchoice.modules.electiondevices.ElectionDevice;
-import com.votemetric.biometricchoice.modules.electionresult.ElectionResult;
 import com.votemetric.biometricchoice.modules.location.Location;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -43,9 +42,6 @@ public class Election {
     private LocalDateTime endDate;
 
     // Relationships
-    @OneToMany(mappedBy = "election")
-    private List<ElectionResult> electionResults;
-
     @ManyToMany
     @JoinTable(
             name = "election_candidates",

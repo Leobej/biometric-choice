@@ -28,7 +28,6 @@ public class MqttSubscriberConfig {
     @Autowired
     private SendVoteSubscriber sendVoteSubscriber;
 
-
     @Bean
     public MessageChannel fingerprintChannel() {
         return new DirectChannel();
@@ -54,7 +53,7 @@ public class MqttSubscriberConfig {
     @Bean
     public MqttPahoMessageDrivenChannelAdapter mqttInbound() {
         MqttPahoMessageDrivenChannelAdapter adapter =
-                new MqttPahoMessageDrivenChannelAdapter("tcp://localhost:1883", "testClient", "test/topic");
+                new MqttPahoMessageDrivenChannelAdapter("tcp://localhost:1883", "testClient", "registerVoter");
         adapter.setCompletionTimeout(5000);
         adapter.setConverter(new DefaultPahoMessageConverter());
         adapter.setQos(1);
@@ -102,23 +101,22 @@ public class MqttSubscriberConfig {
         return registerSubscriber;
     }
 
-    // New CNP topic handler
     @Bean
     @ServiceActivator(inputChannel = "cnpInputChannel")
     public CNPSubscriber cnpHandler() {
-        return cnpSubscriber; // replace getCNP with the method of CNPSubscriber
+        return cnpSubscriber;
     }
 
     @Bean
     @ServiceActivator(inputChannel = "voteFingerprintChannel")
     public VoteFingerprintSubscriber voterFingerprintHandler() {
-        return voteFingerprintSubscriber; // replace getCNP with the method of CNPSubscriber
+        return voteFingerprintSubscriber;
     }
 
     @Bean
     @ServiceActivator(inputChannel = "sendVoteChannel")
     public SendVoteSubscriber sendVoteHandler() {
-        return sendVoteSubscriber; // replace getCNP with the method of CNPSubscriber
+        return sendVoteSubscriber;
     }
 
 

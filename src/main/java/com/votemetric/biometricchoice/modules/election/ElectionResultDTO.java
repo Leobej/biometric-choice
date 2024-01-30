@@ -1,4 +1,4 @@
-package com.votemetric.biometricchoice.modules.electionresult;
+package com.votemetric.biometricchoice.modules.election;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

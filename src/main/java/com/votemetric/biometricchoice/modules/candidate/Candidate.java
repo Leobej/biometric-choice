@@ -1,7 +1,6 @@
 package com.votemetric.biometricchoice.modules.candidate;
 
 import com.votemetric.biometricchoice.modules.election.Election;
-import com.votemetric.biometricchoice.modules.electionresult.ElectionResult;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -47,6 +46,4 @@ public class Candidate {
     @ManyToMany(mappedBy = "candidates")
     private List<Election> elections;
 
-    @OneToMany(mappedBy = "candidate")
-    private List<ElectionResult> electionResults;
 }

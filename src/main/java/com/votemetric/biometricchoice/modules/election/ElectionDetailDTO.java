@@ -1,7 +1,6 @@
 package com.votemetric.biometricchoice.modules.election;
 
 import com.votemetric.biometricchoice.modules.candidate.CandidateDTO;
-import com.votemetric.biometricchoice.modules.electionresult.ElectionResultDTO;
 import com.votemetric.biometricchoice.modules.voter.VoterDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

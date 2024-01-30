@@ -1,7 +1,6 @@
 package com.votemetric.biometricchoice.modules.election;
 
 import com.votemetric.biometricchoice.interfaces.IElectionService;
-import com.votemetric.biometricchoice.mapper.Mapper;
 import com.votemetric.biometricchoice.modules.votingtrend.DailyVotingTrendDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,18 +15,10 @@ import java.util.List;
 @RequestMapping("/elections")
 public class ElectionController {
     private final IElectionService electionService;
-    private final Mapper mapper;
 
-    public ElectionController(IElectionService electionService, Mapper mapper) {
+    public ElectionController(IElectionService electionService) {
         this.electionService = electionService;
-        this.mapper = mapper;
     }
-
-    //    @GetMapping
-//    public ResponseEntity<List<ElectionDTO>> getAllElections() {
-//        List<ElectionDTO> elections = electionService.getAllElections();
-//        return ResponseEntity.ok(elections);
-//    }
 
     @GetMapping("/{id}/details")
     public ResponseEntity<ElectionDetailDTO> getElectionDetailsById(@PathVariable("id") Long id) {
@@ -103,6 +94,12 @@ public class ElectionController {
     public ResponseEntity<Page<ElectionDTO>> getUpcomingElections(Pageable pageable) {
         Page<ElectionDTO> page = electionService.getElectionsByDateRange(pageable, LocalDateTime.now(), null, true);
         return new ResponseEntity<>(page, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/age-distribution")
+    public ResponseEntity<List<AgeDistributionDTO>> getAgeDistribution(@PathVariable("id") Long electionId) {
+        List<AgeDistributionDTO> ageDistribution = electionService.getAgeDistributionByElectionId(electionId);
+        return ResponseEntity.ok(ageDistribution);
     }
 }
 

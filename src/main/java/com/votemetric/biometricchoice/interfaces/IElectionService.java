@@ -1,5 +1,6 @@
 package com.votemetric.biometricchoice.interfaces;
 
+import com.votemetric.biometricchoice.modules.election.AgeDistributionDTO;
 import com.votemetric.biometricchoice.modules.election.CandidateVoteCountDTO;
 import com.votemetric.biometricchoice.modules.election.ElectionDTO;
 import com.votemetric.biometricchoice.modules.election.ElectionDetailDTO;
@@ -35,5 +36,7 @@ public interface IElectionService {
     List<CandidateVoteCountDTO> getAggregatedVotesByElectionId(Long electionId);
 
     //    Page<ElectionDTO> getElectionsByDateRange(Pageable pageable, LocalDateTime now, Object o, boolean b);
-    public Page<ElectionDTO> getElectionsByDateRange(Pageable pageable, LocalDateTime from, LocalDateTime to, boolean isUpcoming);
+    Page<ElectionDTO> getElectionsByDateRange(Pageable pageable, LocalDateTime from, LocalDateTime to, boolean isUpcoming);
+
+    List<AgeDistributionDTO> getAgeDistributionByElectionId(Long electionId);
 }

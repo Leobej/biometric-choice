@@ -13,5 +13,5 @@ public interface IFingerprintService {
 
     FingerprintDTO createFingerprint(FingerprintDTO fingerprintDTO);
 
-    Long getFingerprintByDeviceId(String deviceId);
+    Long getFingerprintByDeviceId(Long deviceId);
 }

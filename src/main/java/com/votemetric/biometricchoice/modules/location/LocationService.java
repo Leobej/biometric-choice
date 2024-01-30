@@ -1,11 +1,8 @@
 package com.votemetric.biometricchoice.modules.location;
 
-import com.votemetric.biometricchoice.modules.location.LocationDTO;
-import com.votemetric.biometricchoice.modules.location.Location;
 import com.votemetric.biometricchoice.exception.LocationNotFoundException;
 import com.votemetric.biometricchoice.interfaces.ILocationService;
 import com.votemetric.biometricchoice.mapper.Mapper;
-import com.votemetric.biometricchoice.modules.location.LocationRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

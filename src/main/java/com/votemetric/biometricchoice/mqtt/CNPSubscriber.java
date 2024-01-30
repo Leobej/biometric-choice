@@ -13,7 +13,7 @@ public class CNPSubscriber {
     private final Logger logger = LoggerFactory.getLogger(CNPSubscriber.class);
     private final VoterRepository voterRepository;
     private final MqttPublisher mqttPublisher;
-    private String cnp = "";
+    private final String cnp = "";
 
     public CNPSubscriber(VoterRepository voterRepository, MqttPublisher mqttPublisher) {
         this.voterRepository = voterRepository;

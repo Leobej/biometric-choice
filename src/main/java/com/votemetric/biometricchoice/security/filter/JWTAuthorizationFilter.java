@@ -2,8 +2,10 @@ package com.votemetric.biometricchoice.security.filter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.votemetric.biometricchoice.modules.admin.AdminDTO;
 import com.votemetric.biometricchoice.interfaces.IAdminService;
+import com.votemetric.biometricchoice.interfaces.IUserService;
+import com.votemetric.biometricchoice.modules.admin.AdminDTO;
+import com.votemetric.biometricchoice.modules.user.UserDTO;
 import com.votemetric.biometricchoice.security.SecurityConstants;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,9 +22,11 @@ import java.util.List;
 public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
     private final IAdminService adminService;
+    private final IUserService userService;
 
-    public JWTAuthorizationFilter(IAdminService adminService) {
+    public JWTAuthorizationFilter(IAdminService adminService, IUserService userService) {
         this.adminService = adminService;
+        this.userService = userService;
     }
 
     @Override
@@ -38,19 +42,37 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
                 .build()
                 .verify(token)
                 .getSubject();
+        try {
+            AdminDTO admin = adminService.loadUserByEmail(email);
 
-        AdminDTO admin = adminService.loadUserByEmail(email);
-
-        if (isAuthorized(admin.getRole(), request)) {
-            Authentication authentication = new UsernamePasswordAuthenticationToken(email, null, List.of());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            filterChain.doFilter(request, response);
-        } else {
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            response.getWriter().write("You don't have permission to access this resource");
-            response.getWriter().flush();
+            if (isAuthorized(admin.getRole(), request)) {
+                Authentication authentication = new UsernamePasswordAuthenticationToken(email, null, List.of());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                filterChain.doFilter(request, response);
+            } else {
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                response.getWriter().write("You don't have permission to access this resource");
+                response.getWriter().flush();
+            }
+        } catch (Exception e) {
+            try {
+                UserDTO user = userService.getUserByEmail(email);
+                if (user != null) {
+                    Authentication authentication = new UsernamePasswordAuthenticationToken(email, null, List.of());
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                    filterChain.doFilter(request, response);
+                } else {
+                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                    response.getWriter().write("You don't have permission to access this resource");
+                    response.getWriter().flush();
+                }
+                //System.out.println("User is not found"
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
         }
     }
+
 
     private boolean isAuthorized(String role, HttpServletRequest request) {
         String requestMethod = request.getMethod();
@@ -75,7 +97,6 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
         if (requestURI.startsWith("/user/user-role/")) {
             return true;
         }
-
-        return false;
+        return true;
     }
 }

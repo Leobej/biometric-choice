@@ -11,13 +11,13 @@ import org.springframework.messaging.MessagingException;
 import org.springframework.stereotype.Service;
 
 import javax.websocket.MessageHandler;
-import java.util.logging.Logger;
 
 @Service
 public class SendVoteSubscriber implements MessageHandler {
 
     private final VoterHistoryRepository voterHistoryRepository;
     private final org.slf4j.Logger logger = LoggerFactory.getLogger(SendVoteSubscriber.class);
+
     public SendVoteSubscriber(VoterHistoryRepository voterHistoryRepository) {
         this.voterHistoryRepository = voterHistoryRepository;
     }

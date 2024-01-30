@@ -3,7 +3,6 @@ package com.votemetric.biometricchoice.security.filter;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.votemetric.biometricchoice.modules.admin.AdminDTO;
 import com.votemetric.biometricchoice.security.SecurityConstants;
 import com.votemetric.biometricchoice.security.manager.CustomAuthenticationManager;
 import lombok.AllArgsConstructor;

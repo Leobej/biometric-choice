@@ -8,10 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DeviceDTO {
-
     private Long id;
     private String type;
     private String status;
     private String name;
-
 }

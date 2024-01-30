@@ -2,14 +2,12 @@ package com.votemetric.biometricchoice.modules.election;
 
 import com.votemetric.biometricchoice.exception.CandidateNotFoundException;
 import com.votemetric.biometricchoice.exception.ElectionNotFoundException;
-import com.votemetric.biometricchoice.exception.ElectionResultNotFoundException;
 import com.votemetric.biometricchoice.exception.LocationNotFoundException;
 import com.votemetric.biometricchoice.interfaces.IElectionService;
 import com.votemetric.biometricchoice.mapper.Mapper;
 import com.votemetric.biometricchoice.modules.candidate.Candidate;
 import com.votemetric.biometricchoice.modules.candidate.CandidateDTO;
 import com.votemetric.biometricchoice.modules.candidate.CandidateRepository;
-import com.votemetric.biometricchoice.modules.electionresult.ElectionResultDTO;
 import com.votemetric.biometricchoice.modules.location.Location;
 import com.votemetric.biometricchoice.modules.location.LocationRepository;
 import com.votemetric.biometricchoice.modules.voter.Voter;
@@ -182,7 +180,7 @@ public class ElectionService implements IElectionService {
     void checkIfElectionExists(Long id) {
         boolean exists = electionRepository.existsById(id);
         if (!exists) {
-            throw new ElectionResultNotFoundException(id);
+            throw new ElectionNotFoundException(id);
         }
     }
 
@@ -207,7 +205,7 @@ public class ElectionService implements IElectionService {
         return voteCounts.stream()
                 .map(result -> {
                     Candidate candidate = candidateRepository.findById((Long) result[0])
-                            .orElseThrow(() -> new ElectionResultNotFoundException((Long) result[0]));
+                            .orElseThrow(() -> new ElectionNotFoundException((Long) result[0]));
                     return new ElectionResultDTO(
                             candidate.getCandidateId(),
                             candidate.getFirstname(),
@@ -259,6 +257,10 @@ public class ElectionService implements IElectionService {
             elections = electionRepository.findByEndDateBefore(LocalDateTime.now(), pageable);
         }
         return elections.map(election -> mapper.convertToType(election, ElectionDTO.class));
+    }
+
+    public List<AgeDistributionDTO> getAgeDistributionByElectionId(Long electionId) {
+        return voterRepository.countAgeDistributionByElectionId(electionId);
     }
 
 }

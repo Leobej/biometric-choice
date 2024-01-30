@@ -1,17 +1,11 @@
 package com.votemetric.biometricchoice.interfaces;
 
-import com.votemetric.biometricchoice.modules.device.DeviceDTO;
 import com.votemetric.biometricchoice.exception.DeviceNotFoundException;
+import com.votemetric.biometricchoice.modules.device.DeviceDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-
 public interface IDeviceService {
-
-    List<DeviceDTO> getAllDevices();
-
-    public Page<DeviceDTO> getAllDevices(Pageable pageable);
 
     Page<DeviceDTO> getAllDevices(String search, Pageable pageable);
 
