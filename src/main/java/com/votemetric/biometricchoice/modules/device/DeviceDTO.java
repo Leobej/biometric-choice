@@ -12,4 +12,5 @@ public class DeviceDTO {
     private String type;
     private String status;
     private String name;
+    private Long locationId;
 }

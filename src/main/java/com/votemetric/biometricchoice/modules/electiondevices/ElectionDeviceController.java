@@ -1,6 +1,7 @@
 package com.votemetric.biometricchoice.modules.electiondevices;
 
 import com.votemetric.biometricchoice.interfaces.IElectionDeviceService;
+import com.votemetric.biometricchoice.modules.device.DeviceDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,13 @@ public class ElectionDeviceController {
     }
 
     @GetMapping("/election/{electionId}")
-    public ResponseEntity<List<ElectionDeviceDTO>> getAllDevicesForElection(@PathVariable long electionId) {
+    public ResponseEntity<List<DeviceDTO>> getAllDevicesForElection(@PathVariable long electionId) {
         return ResponseEntity.ok(electionDeviceService.getAllDevicesForElection(electionId));
+    }
+
+    @PutMapping("/edit/{electionId}")
+    public ResponseEntity<List<DeviceDTO>> editDeviceOfElection(@PathVariable long electionId, @RequestBody List<Long> deviceIds) {
+        electionDeviceService.editElectionDevices(electionId, deviceIds);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -7,10 +7,12 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.MessagingException;
 import org.springframework.stereotype.Service;
 
-import javax.websocket.MessageHandler;
+
+
 import java.util.Objects;
 
 @Service
@@ -23,8 +25,8 @@ public class RegisterSubscriber implements MessageHandler {
         this.fingerprintRepository = fingerprintRepository;
         this.deviceRepository = deviceRepository;
     }
-
-    public void getFingerprint(Message<?> message) throws MessagingException {
+@Override
+    public void handleMessage(Message<?> message) throws MessagingException {
         // here to modify the logic for registration of a voter into system
         // it is not necessary to use the fingerprint for registration
         // fingerprint is no more used, instead it will be used the id of the fingerprint from the sensor, also there will be the match done

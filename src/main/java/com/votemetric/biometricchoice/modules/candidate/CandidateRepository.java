@@ -30,4 +30,12 @@ public interface CandidateRepository extends JpaRepository<Candidate, Long> {
             "WHERE d.name = :deviceName AND e.active = true")
     List<Candidate> findCandidatesByDeviceName(@Param("deviceName") String deviceName);
 
+    @Query("SELECT e.electionId FROM Election e " +
+            "JOIN e.electionDevices ed " +
+            "JOIN ed.device d " +
+            "WHERE d.name = :deviceName AND e.active = true")
+    Long findElectionIdByDeviceName(@Param("deviceName") String deviceName);
+
+
+
 }

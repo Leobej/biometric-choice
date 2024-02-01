@@ -21,7 +21,7 @@ public class MqttPublisher {
         Message<String> mqttMessage = MessageBuilder
                 .withPayload(payload)
                 .setHeader(MessageHeaders.CONTENT_TYPE, "text/plain")
-                .setHeader(MqttHeaders.TOPIC, topic) // set the topic
+                .setHeader(MqttHeaders.TOPIC, topic)
                 .build();
         mqttHandler.handleMessage(mqttMessage);
     }

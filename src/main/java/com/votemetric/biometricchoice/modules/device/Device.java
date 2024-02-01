@@ -1,5 +1,6 @@
 package com.votemetric.biometricchoice.modules.device;
 
+import com.votemetric.biometricchoice.modules.location.Location;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,4 +27,8 @@ public class Device {
 
     @Column
     private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "location_id", nullable = false)
+    private Location location;
 }

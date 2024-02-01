@@ -51,6 +51,9 @@ public class Election {
     private List<Candidate> candidates;
 
     @OneToMany(mappedBy = "election")
-    private List<ElectionDevice> electionDevices; // Add this line
+    private List<ElectionDevice> electionDevices;
 
+    public Election(Long electionId) {
+        this.electionId = electionId;
+    }
 }

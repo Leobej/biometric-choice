@@ -2,6 +2,8 @@ package com.votemetric.biometricchoice.mqtt;
 
 import com.votemetric.biometricchoice.modules.candidate.Candidate;
 import com.votemetric.biometricchoice.modules.candidate.CandidateRepository;
+import com.votemetric.biometricchoice.modules.candidate.ElectionCandidatesDTO;
+import com.votemetric.biometricchoice.modules.device.DeviceRepository;
 import com.votemetric.biometricchoice.modules.fingerprint.FingerprintRepository;
 import com.votemetric.biometricchoice.modules.voter.Voter;
 import com.votemetric.biometricchoice.modules.voter.VoterRepository;
@@ -11,6 +13,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.MessagingException;
 import org.springframework.stereotype.Service;
 
@@ -19,24 +22,27 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class VoteFingerprintSubscriber {
+public class VoteFingerprintSubscriber implements MessageHandler {
 
     private final Logger logger = LoggerFactory.getLogger(VoteFingerprintSubscriber.class);
     private final FingerprintRepository fingerprintRepository;
     private final VoterRepository voterRepository;
     private final CandidateRepository candidateRepository;
+    private final DeviceRepository deviceRepository;
     private final MqttPublisher mqttPublisher;
-    private String deviceId;
+    private String deviceName;
 
     public VoteFingerprintSubscriber(FingerprintRepository fingerprintRepository,
                                      VoterRepository voterRepository,
-                                     CandidateRepository candidateRepository, MqttPublisher mqttPublisher) {
+                                     CandidateRepository candidateRepository, DeviceRepository deviceRepository, MqttPublisher mqttPublisher) {
         this.fingerprintRepository = fingerprintRepository;
         this.voterRepository = voterRepository;
         this.candidateRepository = candidateRepository;
+        this.deviceRepository = deviceRepository;
         this.mqttPublisher = mqttPublisher;
     }
 
+    @Override
     public void handleMessage(Message<?> message) throws MessagingException {
         String payload = message.getPayload().toString();
         logger.info("Message received: {}", payload);
@@ -49,36 +55,44 @@ public class VoteFingerprintSubscriber {
         JSONObject jsonObject = new JSONObject(payload);
 
         if (jsonObject.has("fingerprint")) {
-            handleFingerprintMessage(jsonObject);
+            sendCandidatesElectionAndVoter(jsonObject);
         }
     }
 
-    private void handleFingerprintMessage(JSONObject jsonObject) {
-        Long fingerprint = jsonObject.getLong("fingerprint");
-        this.deviceId = jsonObject.getString("deviceId");
-        FingerprintVerificationResult verificationResult = verifyFingerprint(fingerprint);
-        String verificationStatus = verificationResult.isVerified() ? "verified" : "not verified";
+    private void sendCandidatesElectionAndVoter(JSONObject jsonObject) {
+        try {
+            Long fingerprint = jsonObject.getLong("fingerprint");
+            this.deviceName = jsonObject.getString("deviceId");
+            FingerprintVerificationResult verificationResult = verifyFingerprint(fingerprint);
+            String verificationStatus = verificationResult.isVerified() ? "verified" : "not verified";
+            logger.info("device name: {}", deviceName);
+            JSONObject messageJson = new JSONObject();
+            messageJson.put("status", verificationStatus);
 
-        JSONObject messageJson = new JSONObject();
-        messageJson.put("status", verificationStatus);
+            if (verificationResult.isVerified()) {
+                ElectionCandidatesDTO electionCandidatesDTO = transformCandidateElectionCandidates(deviceName);
+                messageJson.put("voterId", verificationResult.getVoterId());
+                messageJson.put("electionId", electionCandidatesDTO.getElectionId());
+                messageJson.put("locationId", electionCandidatesDTO.getLocation());
+                List<Candidate> candidates = getCandidates(deviceName);
+                JSONArray candidatesJsonArray = new JSONArray();
 
-        if (verificationResult.isVerified()) {
-            messageJson.put("voterId", verificationResult.getVoterId());
-            List<Candidate> candidates = getCandidates(deviceId);
-            JSONArray candidatesJsonArray = new JSONArray();
-            for (Candidate candidate : candidates) {
-                JSONObject candidateJson = new JSONObject();
-                candidateJson.put("id", candidate.getCandidateId());
-                candidateJson.put("name", candidate.getLastname() + candidate.getFirstname());
-                candidatesJsonArray.put(candidateJson);
+                for (Candidate candidate : candidates) {
+                    JSONObject candidateJson = new JSONObject();
+                    candidateJson.put("id", candidate.getCandidateId());
+                    candidateJson.put("name", candidate.getLastname() + candidate.getFirstname());
+                    candidatesJsonArray.put(candidateJson);
+                }
+                messageJson.put("candidates", candidatesJsonArray);
             }
-            messageJson.put("candidates", candidatesJsonArray);
-        }
 
-        String message = messageJson.toString();
-        mqttPublisher.publish("voteFingerprintTopic", message);
-        logger.info("Message published: {}", message);
-        resetFingerprintData();
+            String message = messageJson.toString();
+            mqttPublisher.publish("voteFingerprintTopic", message);
+            logger.info("Message published: {}", message);
+            resetFingerprintData();
+        } catch (Exception e) {
+            logger.error("Error while sending candidates and election", e);
+        }
     }
 
     private List<Candidate> getCandidates(String deviceName) {
@@ -88,6 +102,15 @@ public class VoteFingerprintSubscriber {
             logger.error("Invalid device ID format: {}", deviceName, e);
             return Collections.emptyList();
         }
+    }
+
+    public ElectionCandidatesDTO transformCandidateElectionCandidates(String deviceName) {
+        List<Candidate> candidates = candidateRepository.findCandidatesByDeviceName(deviceName);
+        Long electionId = candidateRepository.findElectionIdByDeviceName(deviceName);
+        Long location = deviceRepository.findLocationIdByDeviceName(deviceName);
+        logger.info("Election ID: {}", electionId);
+        ElectionCandidatesDTO dto = new ElectionCandidatesDTO(candidates, electionId, location);
+        return dto;
     }
 
     private FingerprintVerificationResult verifyFingerprint(Long receivedFingerprint) {
@@ -107,6 +130,6 @@ public class VoteFingerprintSubscriber {
 
 
     private void resetFingerprintData() {
-        deviceId = null;
+        deviceName = null;
     }
 }

@@ -254,7 +254,7 @@ public class ElectionService implements IElectionService {
         if (isUpcoming) {
             elections = electionRepository.findByStartDateAfter(LocalDateTime.now(), pageable);
         } else {
-            elections = electionRepository.findByEndDateBefore(LocalDateTime.now(), pageable);
+            elections = electionRepository.findOngoingOrPastElections(LocalDateTime.now(), pageable);
         }
         return elections.map(election -> mapper.convertToType(election, ElectionDTO.class));
     }

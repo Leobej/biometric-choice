@@ -59,8 +59,8 @@ public class FingerprintService implements IFingerprintService {
     }
 
     @Override
-    public Long getFingerprintByDeviceId(Long deviceId) {
-        return fingerprintRepository.findLatestByDeviceId(deviceId).getId();
+    public String getFingerprintByDeviceId(Long deviceId) {
+        return fingerprintRepository.findLatestByDeviceId(deviceId).getFingerprint();
     }
 
 

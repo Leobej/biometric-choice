@@ -19,7 +19,7 @@ public class CNPSubscriber {
         this.voterRepository = voterRepository;
         this.mqttPublisher = mqttPublisher;
     }
-    public void getCnp(Message<?> message) throws MessagingException {
+    public void getCnp(Message<?> message) throws MessagingException, InterruptedException {
         String payload = message.getPayload().toString();
         logger.info("CNP Infos received: {}", payload);
 
@@ -33,6 +33,8 @@ public class CNPSubscriber {
 
         if (voterRepository.findByCnp(sentCnp).isPresent()) {
             logger.info("CNP exists: {}", sentCnp);
+            mqttPublisher.publish("voteFingerprintTopic", "vote");
+            Thread.sleep(500);
             mqttPublisher.publish("voteFingerprintTopic", "nextFingerprint");
         } else {
             logger.info("CNP does not exist: {}", sentCnp);

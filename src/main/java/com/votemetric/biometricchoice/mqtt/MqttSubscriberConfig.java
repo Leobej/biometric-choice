@@ -10,7 +10,7 @@ import org.springframework.integration.mqtt.inbound.MqttPahoMessageDrivenChannel
 import org.springframework.integration.mqtt.support.DefaultPahoMessageConverter;
 import org.springframework.messaging.MessageChannel;
 
-import javax.websocket.MessageHandler;
+import org.springframework.messaging.MessageHandler;
 
 @Configuration
 @EnableIntegration
@@ -47,7 +47,6 @@ public class MqttSubscriberConfig {
     public MessageChannel sendVoteChannel() {
         return new DirectChannel();
     }
-
 
 
     @Bean
@@ -87,7 +86,7 @@ public class MqttSubscriberConfig {
     @Bean
     public MqttPahoMessageDrivenChannelAdapter sendVote() {
         MqttPahoMessageDrivenChannelAdapter adapter =
-                new MqttPahoMessageDrivenChannelAdapter("tcp://localhost:1883", "testClient2", "send/vote");
+                new MqttPahoMessageDrivenChannelAdapter("tcp://localhost:1883", "testClient3", "send/vote");
         adapter.setCompletionTimeout(5000);
         adapter.setConverter(new DefaultPahoMessageConverter());
         adapter.setQos(1);
@@ -109,7 +108,7 @@ public class MqttSubscriberConfig {
 
     @Bean
     @ServiceActivator(inputChannel = "voteFingerprintChannel")
-    public VoteFingerprintSubscriber voterFingerprintHandler() {
+    public MessageHandler  voterFingerprintHandler() {
         return voteFingerprintSubscriber;
     }
 
